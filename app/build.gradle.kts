@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    val hiltVersion = "2.44"
+    val hiltVersion = "2.51.1"
     val navVersion = "2.7.7"
     val roomVersion = "2.6.1"
 
@@ -50,7 +50,7 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.1.5")
 
     implementation("com.google.dagger:hilt-android:$hiltVersion")
-    annotationProcessor("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    annotationProcessor("com.google.dagger:hilt-compiler:$hiltVersion")
 
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
