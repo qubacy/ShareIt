@@ -1,4 +1,4 @@
-package com.qubacy.shareit.application.ui.activity._common;
+package com.qubacy.shareit.application.ui.activity;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -8,7 +8,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
-public abstract class ShareItActivity extends AppCompatActivity {
+import com.qubacy.shareit.R;
+
+public class ShareItActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +21,8 @@ public abstract class ShareItActivity extends AppCompatActivity {
             splashScreenViewProvider.remove();
             setupEdgeToEdge();
         });
+
+        setContentView(R.layout.activity_container);
     }
 
     private void setupEdgeToEdge() {
