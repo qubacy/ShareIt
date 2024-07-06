@@ -12,12 +12,19 @@ import androidx.lifecycle.ViewModelProvider;
 import com.qubacy.shareit.application.ui.activity.page._common.stateful.StatefulFragment;
 import com.qubacy.shareit.application.ui.activity.page.auth.model._common.AuthViewModel;
 import com.qubacy.shareit.application.ui.activity.page.auth.model._common.state.AuthState;
+import com.qubacy.shareit.application.ui.activity.page.auth.model._di.module.AuthViewModelFactoryQualifier;
 import com.qubacy.shareit.databinding.FragmentAuthBinding;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
+    @AuthViewModelFactoryQualifier
+    @Inject
+    public ViewModelProvider.Factory viewModelFactory;
+
     private AuthViewModel _viewModel;
     private FragmentAuthBinding _binding;
 
@@ -30,7 +37,8 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        _viewModel = new ViewModelProvider(this, viewModelFactory)
+            .get(AuthViewModel.class);
     }
 
     @Nullable

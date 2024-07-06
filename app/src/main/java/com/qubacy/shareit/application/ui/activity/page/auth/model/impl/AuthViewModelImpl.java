@@ -9,20 +9,15 @@ import com.qubacy.shareit.application.ui.activity.page.auth.model._common.state.
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
-@HiltViewModel
 public class AuthViewModelImpl extends AuthViewModel {
     static String STATE_KEY = "state";
 
     private BehaviorSubject<AuthState> _stateSubject;
     private final SavedStateHandle _store;
 
-    @Inject
     public AuthViewModelImpl(
         SavedStateHandle store
     ) {

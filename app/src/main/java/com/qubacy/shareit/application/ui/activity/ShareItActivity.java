@@ -10,6 +10,9 @@ import androidx.core.splashscreen.SplashScreen;
 
 import com.qubacy.shareit.R;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class ShareItActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
