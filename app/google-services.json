@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "795805498375",
+    "project_id": "share-it-60158",
+    "storage_bucket": "share-it-60158.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795805498375:android:bb6054acb343da93d23ea2",
+        "android_client_info": {
+          "package_name": "com.qubacy.shareit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbyOiQ5_27TZ9oUYGqFcnGYMtfRqozp5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
