@@ -7,7 +7,7 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.qubacy.shareit.application.ui._common.presentation.error.ErrorPresentation;
+import com.qubacy.shareit.application._common.exception.ShareItException;
 import com.qubacy.shareit.application.ui.activity.page._common.base.ShareItFragment;
 import com.qubacy.shareit.application.ui.activity.page._common.stateful.model.ShareItViewModel;
 import com.qubacy.shareit.application.ui.activity.page._common.stateful.model.state.ShareItState;
@@ -46,12 +46,6 @@ public abstract class StatefulFragment<
 
     @CallSuper
     protected void processState(@NotNull StateType state) {
-        ErrorPresentation error = state.getError();
-
-        if (error != null) processError(error);
-    }
-
-    protected void processError(ErrorPresentation error) {
-        // todo: processing the error (showing a dialog, etc.);
+        if (state.error != null) throw new ShareItException(state.error); // todo: is it alright?
     }
 }

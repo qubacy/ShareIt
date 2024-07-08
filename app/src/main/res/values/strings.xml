@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">ShareIt</string>
+
+    <string name="error_dialog_title">Error</string>
+    <string name="error_dialog_neutral_button_text">OK</string>
+
     <string name="fragment_auth_header_logo_text">Share It.</string>
     <string name="fragment_auth_email_input_hint_text">Email</string>
     <string name="fragment_auth_password_input_hint_text">Password</string>

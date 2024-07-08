@@ -21,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.qubacy.shareit.R;
+import com.qubacy.shareit.application._common.error.model.ShareItError;
+import com.qubacy.shareit.application._common.exception.ShareItException;
 import com.qubacy.shareit.application.ui._common.validator.Validator;
 import com.qubacy.shareit.application.ui.activity.page._common.stateful.StatefulFragment;
 import com.qubacy.shareit.application.ui.activity.page.auth.model._common.AuthViewModel;
@@ -214,9 +216,8 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
                     } else {
                         String failMessage = task.getException().getLocalizedMessage();
 
-                        // todo: showing an error..
-
-                        Log.d(TAG, String.format("launchSignUp(): failed! message = %s;", failMessage));
+                        // todo: set the real id later:
+                        throw new ShareItException(new ShareItError(0, failMessage, false));
                     }
                 }
             });
