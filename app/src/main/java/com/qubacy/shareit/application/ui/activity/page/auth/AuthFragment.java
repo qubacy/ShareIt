@@ -217,7 +217,7 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
                         String failMessage = task.getException().getLocalizedMessage();
 
                         // todo: set the real id later:
-                        throw new ShareItException(new ShareItError(0, failMessage, false));
+                        throw new ShareItException(0, failMessage);
                     }
                 }
             });

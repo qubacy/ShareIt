@@ -2,33 +2,40 @@ package com.qubacy.shareit.application.ui.activity;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.qubacy.shareit.R;
 import com.qubacy.shareit.application._common.error.handler.ErrorHandler;
 import com.qubacy.shareit.application._common.error.model.ShareItError;
+import com.qubacy.shareit.application.ui.activity.model._common.ShareItActivityViewModel;
+import com.qubacy.shareit.application.ui.activity.model._di.ShareItActivityViewModelFactoryQualifier;
 import com.qubacy.shareit.application.ui.activity.page._common.base.ShareItFragment;
 import com.qubacy.shareit.databinding.ActivityContainerBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class ShareItActivity extends AppCompatActivity implements ErrorHandler.Callback  {
-    static String ERROR_KEY = "error";
-
     private ActivityContainerBinding _binding;
+    @Inject
+    @ShareItActivityViewModelFactoryQualifier
+    public ViewModelProvider.Factory modelFactory;
+    private ShareItActivityViewModel _model;
 
-    private ShareItError _error;
     private AlertDialog _errorDialog;
+
+    private boolean _isDestroying = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,27 +54,24 @@ public class ShareItActivity extends AppCompatActivity implements ErrorHandler.C
 
         setContentView(_binding.getRoot());
 
-        if (savedInstanceState != null) restoreState(savedInstanceState);
-        if (_error != null) processError(_error);
-    }
+        _model = new ViewModelProvider(this, modelFactory).get(ShareItActivityViewModel.class);
 
-    private void restoreState(@NotNull Bundle savedInstanceState) {
-        if (savedInstanceState.containsKey(ERROR_KEY))
-            _error = savedInstanceState.getParcelable(ERROR_KEY);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        if (_error != null) outState.putParcelable(ERROR_KEY, _error);
-
-        super.onSaveInstanceState(outState);
+        checkLastError();
     }
 
     @Override
     public void onDestroy() {
+        _isDestroying = true;
+
         if (_errorDialog != null) _errorDialog.dismiss();
 
         super.onDestroy();
+    }
+
+    private void checkLastError() {
+        final ShareItError lastError = _model.lastError();
+
+        if (lastError != null) processError(lastError);
     }
 
     private void setupEdgeToEdge() {
@@ -79,25 +83,33 @@ public class ShareItActivity extends AppCompatActivity implements ErrorHandler.C
     }
 
     public void processError(@NotNull ShareItError error) {
-        _error = error;
-        _errorDialog = new AlertDialog.Builder(this)
+        _errorDialog = new MaterialAlertDialogBuilder(this)
             .setTitle(R.string.error_dialog_title)
             .setMessage(error.message)
             .setNeutralButton(R.string.error_dialog_neutral_button_text, (dialog, which) -> {
                 dialog.dismiss();
             })
-            .setOnDismissListener((dialog) -> onErrorDialogDismissed())
+            .setOnDismissListener((dialog) -> onErrorDialogDismissed(error))
             .show();
     }
 
-    private void onErrorDialogDismissed() {
+    private void onErrorDialogDismissed(@NotNull ShareItError error) {
+        if (_isDestroying) return;
+        if (error.isCritical) {
+            finishAndRemoveTask();
+
+            return;
+        }
+
         ShareItFragment currentFragment = _binding.activityContainerFragmentContainer.getFragment();
 
-        currentFragment.postProcessError(_error);
+        currentFragment.postProcessError(error);
     }
 
     @Override
-    public void onErrorCaught(@NotNull ShareItError error) {
+    public void onErrorCaught(int id, @Nullable String cause) {
+        final ShareItError error = _model.retrieveError(id, cause);
+
         processError(error);
     }
 }

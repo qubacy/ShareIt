@@ -1,13 +1,16 @@
 package com.qubacy.shareit.application._common.exception;
 
-import com.qubacy.shareit.application._common.error.model.ShareItError;
+import androidx.annotation.StringRes;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ShareItException extends RuntimeException {
-    public final ShareItError error;
+    @StringRes
+    public final int id;
+    public final String cause;
 
-    public ShareItException(@NotNull ShareItError error) {
-        this.error = error;
+    public ShareItException(int id, @Nullable String cause) {
+        this.id = id;
+        this.cause = cause;
     }
 }

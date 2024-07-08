@@ -46,6 +46,6 @@ public abstract class StatefulFragment<
 
     @CallSuper
     protected void processState(@NotNull StateType state) {
-        if (state.error != null) throw new ShareItException(state.error); // todo: is it alright?
+
     }
 }

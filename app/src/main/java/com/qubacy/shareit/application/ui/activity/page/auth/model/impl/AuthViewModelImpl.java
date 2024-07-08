@@ -24,7 +24,7 @@ public class AuthViewModelImpl extends AuthViewModel {
         super();
 
         _stateSubject = BehaviorSubject.createDefault(
-            new AuthState(null, false, false)
+            new AuthState(false, false)
         );
         _store = store;
 
