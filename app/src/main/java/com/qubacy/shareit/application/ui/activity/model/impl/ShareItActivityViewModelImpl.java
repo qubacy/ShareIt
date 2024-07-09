@@ -41,7 +41,7 @@ public class ShareItActivityViewModelImpl extends ShareItActivityViewModel {
 
         // todo: set the gotten error as _error;
 
-        return null;
+        return new ShareItError(id, "msg", false); // todo: delete;
     }
 
     @Override

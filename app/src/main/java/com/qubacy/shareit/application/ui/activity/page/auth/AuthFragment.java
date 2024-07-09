@@ -198,9 +198,8 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
         String password = _binding.fragmentAuthPasswordInput.getText().toString();
 
         if (!emailValidator.validate(email) || !passwordValidator.validate(password)) {
-            // todo: showing an error..
-
-            return null;
+            // todo: set the real id later:
+            throw new ShareItException(0, null);
         }
 
         return new Credentials(email, password);
@@ -233,9 +232,8 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
                     } else {
                         String failMessage = task.getException().getLocalizedMessage();
 
-                        // todo: showing an error..
-
-                        Log.d(TAG, String.format("launchSignIn(): failed! message = %s;", failMessage));
+                        // todo: set the real id later:
+                        throw new ShareItException(0, failMessage);
                     }
                 }
             });
