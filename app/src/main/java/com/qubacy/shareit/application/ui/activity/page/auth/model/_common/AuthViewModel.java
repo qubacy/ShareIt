@@ -8,6 +8,5 @@ import com.qubacy.shareit.application.ui.activity.page.auth.model._common.state.
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AuthViewModel extends ShareItViewModel<AuthState> {
-    abstract public void signIn(@NotNull SignInData data);
-    abstract public void signUp(@NotNull SignUpData data);
+
 }

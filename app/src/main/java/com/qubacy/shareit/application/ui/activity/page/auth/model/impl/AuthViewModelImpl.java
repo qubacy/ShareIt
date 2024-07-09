@@ -3,8 +3,6 @@ package com.qubacy.shareit.application.ui.activity.page.auth.model.impl;
 import androidx.lifecycle.SavedStateHandle;
 
 import com.qubacy.shareit.application.ui.activity.page.auth.model._common.AuthViewModel;
-import com.qubacy.shareit.application.ui.activity.page.auth.model._common.data.SignInData;
-import com.qubacy.shareit.application.ui.activity.page.auth.model._common.data.SignUpData;
 import com.qubacy.shareit.application.ui.activity.page.auth.model._common.state.AuthState;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,20 +48,6 @@ public class AuthViewModelImpl extends AuthViewModel {
         AuthState lastState = _stateSubject.getValue();
 
         _store.set(STATE_KEY, lastState);
-    }
-
-    @Override
-    public void signIn(@NotNull SignInData data) {
-        // todo: implement..
-
-
-    }
-
-    @Override
-    public void signUp(@NotNull SignUpData data) {
-        // todo: implement..
-
-
     }
 
     @Override

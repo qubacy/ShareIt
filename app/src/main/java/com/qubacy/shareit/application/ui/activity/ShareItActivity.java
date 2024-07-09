@@ -13,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.qubacy.shareit.R;
+import com.qubacy.shareit.application._common.error.bus._common.ErrorBus;
 import com.qubacy.shareit.application._common.error.model.ErrorReference;
 import com.qubacy.shareit.application._common.error.model.ShareItError;
 import com.qubacy.shareit.application.ui.activity.model._common.ShareItActivityViewModel;
@@ -27,12 +28,16 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ShareItActivity extends AppCompatActivity  {
-    private ActivityContainerBinding _binding;
+public class ShareItActivity extends AppCompatActivity implements ErrorBus.Listener  {
     @Inject
     @ShareItActivityViewModelFactoryQualifier
     public ViewModelProvider.Factory modelFactory;
     private ShareItActivityViewModel _model;
+
+    @Inject
+    public ErrorBus errorBus;
+
+    private ActivityContainerBinding _binding;
 
     private AlertDialog _errorDialog;
 
@@ -55,6 +60,8 @@ public class ShareItActivity extends AppCompatActivity  {
 
         _model = new ViewModelProvider(this, modelFactory).get(ShareItActivityViewModel.class);
 
+        errorBus.setup(this);
+
         checkLastError();
     }
 
@@ -63,6 +70,8 @@ public class ShareItActivity extends AppCompatActivity  {
         _isDestroying = true;
 
         if (_errorDialog != null) _errorDialog.dismiss();
+
+        errorBus.dispose();
 
         super.onDestroy();
     }
@@ -118,5 +127,10 @@ public class ShareItActivity extends AppCompatActivity  {
         final ShareItError error = _model.retrieveError(errorReference);
 
         processError(error);
+    }
+
+    @Override
+    public void onErrorGotten(@NotNull ErrorReference errorReference) {
+        onErrorCaught(errorReference);
     }
 }
