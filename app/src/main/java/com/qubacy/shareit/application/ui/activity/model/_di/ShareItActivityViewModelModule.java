@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.qubacy.shareit.application.ui.activity.model.impl.factory.ShareItActivityViewModelImplFactory;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
@@ -11,10 +12,10 @@ import dagger.hilt.android.components.ActivityComponent;
 
 @InstallIn(ActivityComponent.class)
 @Module
-public abstract class ShareItActivityViewModelModule {
+public interface ShareItActivityViewModelModule {
     @ShareItActivityViewModelFactoryQualifier
-    @Provides
-    static ViewModelProvider.Factory provideShareItActivityViewModelFactory() {
-        return new ShareItActivityViewModelImplFactory();
-    }
+    @Binds
+    ViewModelProvider.Factory bindShareItActivityViewModelFactory(
+        ShareItActivityViewModelImplFactory shareItActivityViewModelFactory
+    );
 }

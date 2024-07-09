@@ -5,7 +5,10 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.qubacy.shareit.application.data.error.repository.source.local.database._common.view.ErrorDatabaseView;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ShareItError implements Parcelable {
     public final long id;
@@ -13,7 +16,7 @@ public class ShareItError implements Parcelable {
     public final boolean isCritical;
 
     public ShareItError(
-        int id,
+        long id,
         @NotNull String message,
         boolean isCritical
     ) {
@@ -50,5 +53,16 @@ public class ShareItError implements Parcelable {
         dest.writeLong(id);
         dest.writeString(message);
         dest.writeByte((byte) (isCritical ? 1 : 0));
+    }
+
+    public static ShareItError fromErrorDatabaseView(
+        @NotNull ErrorDatabaseView errorDatabaseView,
+        @Nullable String cause
+    ) {
+        return new ShareItError(
+            errorDatabaseView.id,
+            cause != null ? cause : errorDatabaseView.localization,
+            errorDatabaseView.isCritical
+        );
     }
 }

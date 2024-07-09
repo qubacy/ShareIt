@@ -7,12 +7,12 @@ import com.qubacy.shareit.application.data.error.repository.source.local.databas
 
 import org.jetbrains.annotations.NotNull;
 
-import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.core.Single;
 
 @Dao
 public interface ErrorDatabaseDao {
     @Query(
         "SELECT * FROM ErrorDatabaseView WHERE id = :id AND lang = :lang"
     )
-    Maybe<ErrorDatabaseView> getErrorViewByIdAndLang(long id, @NotNull String lang);
+    Single<ErrorDatabaseView> getErrorViewByIdAndLang(long id, @NotNull String lang);
 }
