@@ -45,7 +45,5 @@ public abstract class StatefulFragment<
     }
 
     @CallSuper
-    protected void processState(@NotNull StateType state) {
-
-    }
+    protected void processState(@NotNull StateType state) {}
 }

@@ -56,6 +56,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-rxjava3:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
     implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
