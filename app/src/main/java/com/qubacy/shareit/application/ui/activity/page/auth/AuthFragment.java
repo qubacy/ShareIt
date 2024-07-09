@@ -176,6 +176,13 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
         _binding.fragmentAuthSignUpButton.setOnClickListener((view) -> onSignUpClicked());
     }
 
+    private void setControlsEnabled(boolean areEnabled) {
+        _binding.fragmentAuthEmailInput.setEnabled(areEnabled);
+        _binding.fragmentAuthPasswordInput.setEnabled(areEnabled);
+        _binding.fragmentAuthSignInButton.setEnabled(areEnabled);
+        _binding.fragmentAuthSignUpButton.setEnabled(areEnabled);
+    }
+
     private void onSignInClicked() {
         Credentials credentials = retrieveCredentials();
 
@@ -207,6 +214,7 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
     }
 
     private void launchSignUp(@NotNull Credentials credentials) {
+        setControlsEnabled(false);
         _auth.createUserWithEmailAndPassword(credentials.email, credentials.password)
             .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
                 @Override
@@ -218,11 +226,14 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
 
                         onErrorCaught(new ErrorReference(ErrorEnum.SIGN_UP_FAIL.id, failMessage));
                     }
+
+                    setControlsEnabled(true);
                 }
             });
     }
 
     private void launchSignIn(@NotNull Credentials credentials) {
+        setControlsEnabled(false);
         _auth.signInWithEmailAndPassword(credentials.email, credentials.password)
             .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
                 @Override
@@ -234,6 +245,8 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
 
                         onErrorCaught(new ErrorReference(ErrorEnum.SIGN_IN_FAIL.id, failMessage));
                     }
+
+                    setControlsEnabled(true);
                 }
             });
     }

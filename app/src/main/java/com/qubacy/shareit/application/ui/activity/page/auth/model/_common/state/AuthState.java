@@ -4,13 +4,10 @@ import com.qubacy.shareit.application.ui.activity.page._common.stateful.model.st
 
 public class AuthState extends ShareItState {
     public final boolean isLoading;
-    public final boolean isAuthorized;
 
     public AuthState(
-        boolean isLoading,
-        boolean isAuthorized
+        boolean isLoading
     ) {
         this.isLoading = isLoading;
-        this.isAuthorized = isAuthorized;
     }
 }
