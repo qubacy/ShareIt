@@ -2,6 +2,7 @@ package com.qubacy.shareit.application.ui.activity.model.impl;
 
 import androidx.lifecycle.SavedStateHandle;
 
+import com.qubacy.shareit.application._common.error.model.ErrorReference;
 import com.qubacy.shareit.application._common.error.model.ShareItError;
 import com.qubacy.shareit.application.ui.activity.model._common.ShareItActivityViewModel;
 
@@ -13,7 +14,7 @@ public class ShareItActivityViewModelImpl extends ShareItActivityViewModel {
 
     @NotNull
     private final SavedStateHandle _store;
-
+    @Nullable
     private ShareItError _error;
 
     public ShareItActivityViewModelImpl(
@@ -36,12 +37,19 @@ public class ShareItActivityViewModelImpl extends ShareItActivityViewModel {
     }
 
     @Override
-    public @NotNull ShareItError retrieveError(int id, @Nullable String cause) {
+    public @NotNull ShareItError retrieveError(@NotNull ErrorReference errorReference) {
         // todo: retrieving the error using a local error data source;
 
         // todo: set the gotten error as _error;
 
-        return new ShareItError(id, "msg", false); // todo: delete;
+        _error = new ShareItError(errorReference.id, "msg", false); // todo: delete;
+
+        return _error;
+    }
+
+    @Override
+    public void absorbError() {
+        _error = null;
     }
 
     @Override

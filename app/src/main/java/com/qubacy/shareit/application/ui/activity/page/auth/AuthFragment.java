@@ -21,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.qubacy.shareit.R;
+import com.qubacy.shareit.application._common.error.ErrorEnum;
+import com.qubacy.shareit.application._common.error.model.ErrorReference;
 import com.qubacy.shareit.application._common.error.model.ShareItError;
 import com.qubacy.shareit.application._common.exception.ShareItException;
 import com.qubacy.shareit.application.ui._common.validator.Validator;
@@ -198,8 +200,9 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
         String password = _binding.fragmentAuthPasswordInput.getText().toString();
 
         if (!emailValidator.validate(email) || !passwordValidator.validate(password)) {
-            // todo: set the real id later:
-            throw new ShareItException(0, null);
+            onErrorCaught(new ErrorReference(ErrorEnum.INVALID_EMAIL_OR_PASSWORD.id, null));
+
+            return null;
         }
 
         return new Credentials(email, password);
@@ -215,8 +218,7 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
                     } else {
                         String failMessage = task.getException().getLocalizedMessage();
 
-                        // todo: set the real id later:
-                        throw new ShareItException(0, failMessage);
+                        onErrorCaught(new ErrorReference(ErrorEnum.SIGN_UP_FAIL.id, failMessage));
                     }
                 }
             });
@@ -232,8 +234,7 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
                     } else {
                         String failMessage = task.getException().getLocalizedMessage();
 
-                        // todo: set the real id later:
-                        throw new ShareItException(0, failMessage);
+                        onErrorCaught(new ErrorReference(ErrorEnum.SIGN_IN_FAIL.id, failMessage));
                     }
                 }
             });

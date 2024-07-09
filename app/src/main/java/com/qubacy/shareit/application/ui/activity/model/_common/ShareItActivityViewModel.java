@@ -2,6 +2,7 @@ package com.qubacy.shareit.application.ui.activity.model._common;
 
 import androidx.lifecycle.ViewModel;
 
+import com.qubacy.shareit.application._common.error.model.ErrorReference;
 import com.qubacy.shareit.application._common.error.model.ShareItError;
 
 import org.jetbrains.annotations.NotNull;
@@ -12,5 +13,6 @@ public abstract class ShareItActivityViewModel extends ViewModel {
     @Nullable
     public abstract ShareItError lastError();
     @NotNull
-    public abstract ShareItError retrieveError(int id, @Nullable String cause);
+    public abstract ShareItError retrieveError(@NotNull ErrorReference errorReference);
+    public abstract void absorbError();
 }

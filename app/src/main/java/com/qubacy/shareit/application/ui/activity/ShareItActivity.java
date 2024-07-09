@@ -9,10 +9,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.qubacy.shareit.R;
-import com.qubacy.shareit.application._common.error.handler.ErrorHandler;
+import com.qubacy.shareit.application._common.error.model.ErrorReference;
 import com.qubacy.shareit.application._common.error.model.ShareItError;
 import com.qubacy.shareit.application.ui.activity.model._common.ShareItActivityViewModel;
 import com.qubacy.shareit.application.ui.activity.model._di.ShareItActivityViewModelFactoryQualifier;
@@ -26,7 +27,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ShareItActivity extends AppCompatActivity implements ErrorHandler.Callback  {
+public class ShareItActivity extends AppCompatActivity  {
     private ActivityContainerBinding _binding;
     @Inject
     @ShareItActivityViewModelFactoryQualifier
@@ -40,8 +41,6 @@ public class ShareItActivity extends AppCompatActivity implements ErrorHandler.C
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(this));
 
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
 
@@ -101,14 +100,22 @@ public class ShareItActivity extends AppCompatActivity implements ErrorHandler.C
             return;
         }
 
-        ShareItFragment currentFragment = _binding.activityContainerFragmentContainer.getFragment();
+        postProcessError(error);
+    }
+
+    private void postProcessError(@NotNull ShareItError error) {
+        _model.absorbError();
+
+        final NavHostFragment navHostFragment = _binding.activityContainerFragmentContainer
+                .getFragment();
+        final ShareItFragment currentFragment = (ShareItFragment) navHostFragment
+                .getChildFragmentManager().getFragments().get(0);
 
         currentFragment.postProcessError(error);
     }
 
-    @Override
-    public void onErrorCaught(int id, @Nullable String cause) {
-        final ShareItError error = _model.retrieveError(id, cause);
+    public void onErrorCaught(@NotNull ErrorReference errorReference) {
+        final ShareItError error = _model.retrieveError(errorReference);
 
         processError(error);
     }
