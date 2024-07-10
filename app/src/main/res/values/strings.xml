@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">ShareIt</string>
 
+    <string name="drawer_common_logout_title">Logout</string>
+
     <string name="error_dialog_title">Error</string>
     <string name="error_dialog_neutral_button_text">OK</string>
 
@@ -9,4 +11,7 @@
     <string name="fragment_auth_password_input_hint_text">Password</string>
     <string name="fragment_auth_sign_in_button_text">Sign In</string>
     <string name="fragment_auth_sign_up_button_text">Sign Up</string>
+
+    <string name="fragment_idea_list_label">Recent ideas</string>
+
 </resources>

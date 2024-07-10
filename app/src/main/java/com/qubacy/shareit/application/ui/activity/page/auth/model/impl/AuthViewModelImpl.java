@@ -13,11 +13,11 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 public class AuthViewModelImpl extends AuthViewModel {
     static String STATE_KEY = "state";
 
-    private BehaviorSubject<AuthState> _stateController;
+    private final BehaviorSubject<AuthState> _stateController;
     private final SavedStateHandle _store;
 
     public AuthViewModelImpl(
-        SavedStateHandle store
+        @NotNull SavedStateHandle store
     ) {
         super();
 

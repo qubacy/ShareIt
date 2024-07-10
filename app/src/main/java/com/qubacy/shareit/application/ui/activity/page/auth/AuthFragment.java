@@ -12,6 +12,8 @@ import android.view.animation.AccelerateInterpolator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
@@ -252,8 +254,11 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
     }
 
     private void onAuthorized() {
-        // todo: redirect to the Ideas fragment..
-
         Log.d(TAG, "onAuthorized() entered;");
+
+        final NavDirections action =
+            AuthFragmentDirections.actionAuthFragmentToIdeaListFragment();
+
+        NavHostFragment.findNavController(this).navigate(action);
     }
 }

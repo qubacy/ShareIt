@@ -8,10 +8,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.navigation.NavigationView;
 import com.qubacy.shareit.R;
 import com.qubacy.shareit.application._common.error.bus._common.ErrorBus;
 import com.qubacy.shareit.application._common.error.model.ErrorReference;
@@ -24,6 +27,8 @@ import com.qubacy.shareit.databinding.ActivityContainerBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -32,6 +37,10 @@ import io.reactivex.rxjava3.disposables.Disposable;
 
 @AndroidEntryPoint
 public class ShareItActivity extends AppCompatActivity implements ErrorBus.Listener  {
+    public static final Set<Integer> TOP_LEVEL_DESTINATIONS = Set.of(
+        R.id.ideaListFragment
+    );
+
     @Inject
     @ShareItActivityViewModelFactoryQualifier
     public ViewModelProvider.Factory modelFactory;
@@ -69,6 +78,7 @@ public class ShareItActivity extends AppCompatActivity implements ErrorBus.Liste
         _model = new ViewModelProvider(this, modelFactory).get(ShareItActivityViewModel.class);
 
         errorBus.setup(this);
+        setupNavigationDrawer();
     }
 
     @Override
@@ -90,6 +100,18 @@ public class ShareItActivity extends AppCompatActivity implements ErrorBus.Liste
         errorBus.dispose();
 
         super.onDestroy();
+    }
+
+    public DrawerLayout getNavigationDrawerLayout() {
+        return _binding.getRoot();
+    }
+
+    private void setupNavigationDrawer() {
+        final NavHostFragment navHostFragment = _binding
+            .activityContainerFragmentContainer.getFragment();
+
+        NavigationUI.setupWithNavController(
+            _binding.activityContainerDrawer, navHostFragment.getNavController());
     }
 
     private void processState(@NotNull ShareItActivityState state) {

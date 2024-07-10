@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/drawer_common_main_section"
+        android:title="">
+
+        <menu>
+
+            <item
+                android:id="@+id/ideaListFragment"
+                android:icon="@drawable/bulb"
+                android:title="@string/fragment_idea_list_label"
+                app:iconTint="?attr/colorOnSurfaceVariant"
+                app:showAsAction="ifRoom"/>
+
+            <item
+                android:id="@+id/drawer_common_logout"
+                android:icon="@drawable/logout"
+                android:title="@string/drawer_common_logout_title"
+                app:iconTint="?attr/colorOnSurfaceVariant"
+                app:showAsAction="ifRoom"/>
+        </menu>
+    </item>
+</menu>
