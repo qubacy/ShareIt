@@ -19,6 +19,14 @@
             app:menu="@menu/topbar_idea_list"
             tools:title="Recent Ideas"/>
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/fragment_ideas_topbar_progress_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:indeterminate="true"
+            tools:progress="50"/>
+
     </com.google.android.material.appbar.AppBarLayout>
     
     <androidx.recyclerview.widget.RecyclerView

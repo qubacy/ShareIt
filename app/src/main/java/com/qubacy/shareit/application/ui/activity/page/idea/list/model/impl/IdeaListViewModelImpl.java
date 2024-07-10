@@ -2,10 +2,13 @@ package com.qubacy.shareit.application.ui.activity.page.idea.list.model.impl;
 
 import androidx.lifecycle.SavedStateHandle;
 
+import com.qubacy.shareit.application.ui.activity.page.idea._common.presentation.IdeaPresentation;
 import com.qubacy.shareit.application.ui.activity.page.idea.list.model._common.IdeaListViewModel;
 import com.qubacy.shareit.application.ui.activity.page.idea.list.model._common.state.IdeaListState;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
@@ -19,8 +22,22 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
     public IdeaListViewModelImpl(
         @NotNull SavedStateHandle store
     ) {
-        _stateController = BehaviorSubject.createDefault(new IdeaListState());
+        _stateController = BehaviorSubject
+            .createDefault(new IdeaListState(
+                // todo: delete:
+                List.of(new IdeaPresentation("test", "test title", "test content")),
+                false
+            ));
         _store = store;
+
+        restoreState();
+    }
+
+    @Override
+    protected void onCleared() {
+        preserveState();
+
+        super.onCleared();
     }
 
     private void restoreState() {
@@ -40,5 +57,12 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
     @Override
     public @NotNull Observable<IdeaListState> getState() {
         return _stateController;
+    }
+
+    @Override
+    public void getRecentIdeas() {
+        // todo: loading ideas..
+
+
     }
 }

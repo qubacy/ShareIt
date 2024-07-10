@@ -27,6 +27,11 @@ public abstract class StatefulFragment<
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         listenState();
     }

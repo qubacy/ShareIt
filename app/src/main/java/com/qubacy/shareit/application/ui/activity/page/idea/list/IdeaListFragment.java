@@ -104,17 +104,24 @@ public class IdeaListFragment extends StatefulFragment<IdeaListState, IdeaListVi
         _listAdapter = new IdeaListRecyclerViewAdapter();
 
         _binding.fragmentIdeasList.setAdapter(_listAdapter);
-
-        // todo: delete:
-        _listAdapter.submitList(List.of(
-            new IdeaPresentation("1", "title 1", "content 1"),
-            new IdeaPresentation("2", "title 2", "content 2"),
-            new IdeaPresentation("3", "title 3", "content 3")
-        ));
     }
 
     @Override
     protected IdeaListViewModel getModel() {
         return _model;
+    }
+
+    @Override
+    protected void processState(@NotNull IdeaListState state) {
+        super.processState(state);
+
+        if (state.ideas != null) _listAdapter.submitList(state.ideas);
+
+        adjustUiWithLoadingState(state.isLoading);
+    }
+
+    private void adjustUiWithLoadingState(boolean isLoading) {
+        _binding.fragmentIdeasTopbarProgressIndicator
+            .setVisibility(isLoading ? View.VISIBLE : View.INVISIBLE);
     }
 }

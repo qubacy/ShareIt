@@ -4,15 +4,38 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.qubacy.shareit.application.ui.activity._common.model.state.ShareItState;
+import com.qubacy.shareit.application.ui.activity.page.idea._common.presentation.IdeaPresentation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class IdeaListState extends ShareItState implements Parcelable {
-    public IdeaListState() {
+    @Nullable
+    public final ArrayList<IdeaPresentation> ideas;
+    public final boolean isLoading;
 
+    public IdeaListState(
+        @Nullable ArrayList<IdeaPresentation> ideas,
+        boolean isLoading
+    ) {
+        this.ideas = ideas;
+        this.isLoading = isLoading;
+    }
+
+    public IdeaListState(
+        @Nullable List<IdeaPresentation> ideas,
+        boolean isLoading
+    ) {
+        this.ideas = new ArrayList<>(ideas);
+        this.isLoading = isLoading;
     }
 
     protected IdeaListState(Parcel in) {
+        ideas = in.<IdeaPresentation>readArrayList(IdeaListState.class.getClassLoader());
+        isLoading = in.readByte() != 0;
     }
 
     public static final Creator<IdeaListState> CREATOR = new Creator<IdeaListState>() {
@@ -34,5 +57,7 @@ public class IdeaListState extends ShareItState implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        if (ideas != null) dest.writeArray(ideas.toArray());
+        dest.writeByte((byte) (isLoading ? 1 : 0));
     }
 }
