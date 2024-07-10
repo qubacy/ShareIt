@@ -23,10 +23,14 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 public class AuthViewModelImpl extends AuthViewModel {
     static String STATE_KEY = "state";
 
+    @NotNull
     private final BehaviorSubject<AuthState> _stateController;
+    @NotNull
     private final SavedStateHandle _store;
+    @NotNull
     private final ErrorBus _errorBus;
 
+    @NotNull
     private final FirebaseAuth _auth;
 
     public AuthViewModelImpl(
