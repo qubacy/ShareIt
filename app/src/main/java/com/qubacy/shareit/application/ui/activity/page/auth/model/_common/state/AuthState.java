@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import com.qubacy.shareit.application.ui.activity.page._common.stateful.model.state.ShareItState;
+import com.qubacy.shareit.application.ui.activity._common.model.state.ShareItState;
 
 public class AuthState extends ShareItState implements Parcelable {
     public AuthState() {}

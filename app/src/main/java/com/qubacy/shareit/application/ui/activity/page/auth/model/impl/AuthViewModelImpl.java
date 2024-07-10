@@ -13,7 +13,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 public class AuthViewModelImpl extends AuthViewModel {
     static String STATE_KEY = "state";
 
-    private BehaviorSubject<AuthState> _stateSubject;
+    private BehaviorSubject<AuthState> _stateController;
     private final SavedStateHandle _store;
 
     public AuthViewModelImpl(
@@ -21,7 +21,7 @@ public class AuthViewModelImpl extends AuthViewModel {
     ) {
         super();
 
-        _stateSubject = BehaviorSubject.createDefault(new AuthState());
+        _stateController = BehaviorSubject.createDefault(new AuthState());
         _store = store;
 
         restoreState();
@@ -39,17 +39,17 @@ public class AuthViewModelImpl extends AuthViewModel {
 
         if (state == null) return;
 
-        _stateSubject.onNext(state);
+        _stateController.onNext(state);
     }
 
     private void preserveState() {
-        AuthState lastState = _stateSubject.getValue();
+        AuthState lastState = _stateController.getValue();
 
         _store.set(STATE_KEY, lastState);
     }
 
     @Override
     public @NotNull Observable<AuthState> getState() {
-        return _stateSubject;
+        return _stateController;
     }
 }

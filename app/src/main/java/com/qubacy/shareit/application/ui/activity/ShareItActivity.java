@@ -17,6 +17,7 @@ import com.qubacy.shareit.application._common.error.bus._common.ErrorBus;
 import com.qubacy.shareit.application._common.error.model.ErrorReference;
 import com.qubacy.shareit.application._common.error.model.ShareItError;
 import com.qubacy.shareit.application.ui.activity.model._common.ShareItActivityViewModel;
+import com.qubacy.shareit.application.ui.activity.model._common.state.ShareItActivityState;
 import com.qubacy.shareit.application.ui.activity.model._di.ShareItActivityViewModelFactoryQualifier;
 import com.qubacy.shareit.application.ui.activity.page._common.base.ShareItFragment;
 import com.qubacy.shareit.databinding.ActivityContainerBinding;
@@ -26,19 +27,26 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 @AndroidEntryPoint
 public class ShareItActivity extends AppCompatActivity implements ErrorBus.Listener  {
     @Inject
     @ShareItActivityViewModelFactoryQualifier
     public ViewModelProvider.Factory modelFactory;
+    @NotNull
     private ShareItActivityViewModel _model;
 
     @Inject
     public ErrorBus errorBus;
 
+    @NotNull
     private ActivityContainerBinding _binding;
+    @Nullable
+    private Disposable _stateSubscription;
 
+    @Nullable
     private AlertDialog _errorDialog;
 
     private boolean _isDestroying = false;
@@ -61,8 +69,15 @@ public class ShareItActivity extends AppCompatActivity implements ErrorBus.Liste
         _model = new ViewModelProvider(this, modelFactory).get(ShareItActivityViewModel.class);
 
         errorBus.setup(this);
+    }
 
-        checkLastError();
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        _stateSubscription = _model.getState()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(this::processState);
     }
 
     @Override
@@ -70,16 +85,15 @@ public class ShareItActivity extends AppCompatActivity implements ErrorBus.Liste
         _isDestroying = true;
 
         if (_errorDialog != null) _errorDialog.dismiss();
+        if (_stateSubscription != null) _stateSubscription.dispose();
 
         errorBus.dispose();
 
         super.onDestroy();
     }
 
-    private void checkLastError() {
-        final ShareItError lastError = _model.lastError();
-
-        if (lastError != null) processError(lastError);
+    private void processState(@NotNull ShareItActivityState state) {
+        if (state.error != null) processError(state.error);
     }
 
     private void setupEdgeToEdge() {
@@ -124,9 +138,7 @@ public class ShareItActivity extends AppCompatActivity implements ErrorBus.Liste
     }
 
     public void onErrorCaught(@NotNull ErrorReference errorReference) {
-        final ShareItError error = _model.retrieveError(errorReference);
-
-        processError(error);
+        _model.retrieveError(errorReference);
     }
 
     @Override

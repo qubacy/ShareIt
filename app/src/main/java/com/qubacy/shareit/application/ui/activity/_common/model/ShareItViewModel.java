@@ -1,8 +1,8 @@
-package com.qubacy.shareit.application.ui.activity.page._common.stateful.model;
+package com.qubacy.shareit.application.ui.activity._common.model;
 
 import androidx.lifecycle.ViewModel;
 
-import com.qubacy.shareit.application.ui.activity.page._common.stateful.model.state.ShareItState;
+import com.qubacy.shareit.application.ui.activity._common.model.state.ShareItState;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -7,10 +7,9 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.qubacy.shareit.application._common.exception.ShareItException;
 import com.qubacy.shareit.application.ui.activity.page._common.base.ShareItFragment;
-import com.qubacy.shareit.application.ui.activity.page._common.stateful.model.ShareItViewModel;
-import com.qubacy.shareit.application.ui.activity.page._common.stateful.model.state.ShareItState;
+import com.qubacy.shareit.application.ui.activity._common.model.ShareItViewModel;
+import com.qubacy.shareit.application.ui.activity._common.model.state.ShareItState;
 
 import org.jetbrains.annotations.NotNull;
 
