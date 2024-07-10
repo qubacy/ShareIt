@@ -8,9 +8,21 @@ import androidx.annotation.NonNull;
 import com.qubacy.shareit.application.ui.activity._common.model.state.ShareItState;
 
 public class AuthState extends ShareItState implements Parcelable {
-    public AuthState() {}
+    public final boolean isAuthorized;
+    public final boolean isLoading;
 
-    protected AuthState(Parcel in) {}
+    public AuthState(
+        boolean isAuthorized,
+        boolean isLoading
+    ) {
+        this.isAuthorized = isAuthorized;
+        this.isLoading = isLoading;
+    }
+
+    protected AuthState(Parcel in) {
+        isAuthorized = in.readByte() != 0;
+        isLoading = in.readByte() != 0;
+    }
 
     public static final Creator<AuthState> CREATOR = new Creator<AuthState>() {
         @Override
@@ -31,5 +43,7 @@ public class AuthState extends ShareItState implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeByte((byte) (isAuthorized ? 1 : 0));
+        dest.writeByte((byte) (isLoading ? 1 : 0));
     }
 }

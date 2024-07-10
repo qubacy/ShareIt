@@ -17,16 +17,12 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.qubacy.shareit.R;
 import com.qubacy.shareit.application._common.error.ErrorEnum;
 import com.qubacy.shareit.application._common.error.model.ErrorReference;
 import com.qubacy.shareit.application.ui._common.validator.Validator;
 import com.qubacy.shareit.application.ui.activity.page._common.stateful.StatefulFragment;
+import com.qubacy.shareit.application.ui.activity.page.auth._common.data.AuthCredentials;
 import com.qubacy.shareit.application.ui.activity.page.auth.model._common.AuthViewModel;
 import com.qubacy.shareit.application.ui.activity.page.auth.model._common.state.AuthState;
 import com.qubacy.shareit.application.ui.activity.page.auth.model._di.module.AuthViewModelFactoryQualifier;
@@ -42,19 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
-    class Credentials {
-        final String email;
-        final String password;
-
-        public Credentials(String email, String password) {
-            this.email = email;
-            this.password = password;
-        }
-    }
-
     static String TAG = "AuthFragment";
-
-    private FirebaseAuth _auth;
 
     @AuthViewModelFactoryQualifier
     @Inject
@@ -82,7 +66,6 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _auth = FirebaseAuth.getInstance();
         _viewModel = new ViewModelProvider(this, viewModelFactory)
             .get(AuthViewModel.class);
     }
@@ -110,10 +93,6 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
     @Override
     public void onStart() {
         super.onStart();
-
-        FirebaseUser currentUser = _auth.getCurrentUser();
-
-        if (currentUser != null) onAuthorized();
     }
 
     private void setupHeader() {
@@ -186,23 +165,23 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
     }
 
     private void onSignInClicked() {
-        Credentials credentials = retrieveCredentials();
+        AuthCredentials credentials = retrieveCredentials();
 
         if (credentials == null) return;
 
-        launchSignIn(credentials);
+        _viewModel.signIn(credentials);
     }
 
     private void onSignUpClicked() {
-        Credentials credentials = retrieveCredentials();
+        AuthCredentials credentials = retrieveCredentials();
 
         if (credentials == null) return;
 
-        launchSignUp(credentials);
+        _viewModel.signUp(credentials);
     }
 
     @Nullable
-    private Credentials retrieveCredentials() {
+    private AuthCredentials retrieveCredentials() {
         String email = _binding.fragmentAuthEmailInput.getText().toString();
         String password = _binding.fragmentAuthPasswordInput.getText().toString();
 
@@ -212,45 +191,20 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
             return null;
         }
 
-        return new Credentials(email, password);
+        return new AuthCredentials(email, password);
     }
 
-    private void launchSignUp(@NotNull Credentials credentials) {
-        setControlsEnabled(false);
-        _auth.createUserWithEmailAndPassword(credentials.email, credentials.password)
-            .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        onAuthorized();
-                    } else {
-                        String failMessage = task.getException().getLocalizedMessage();
+    @Override
+    protected void processState(@NotNull AuthState state) {
+        super.processState(state);
 
-                        onErrorCaught(new ErrorReference(ErrorEnum.SIGN_UP_FAIL.id, failMessage));
-                    }
+        if (state.isAuthorized) onAuthorized();
 
-                    setControlsEnabled(true);
-                }
-            });
+        adjustUiWithLoadingState(state.isLoading);
     }
 
-    private void launchSignIn(@NotNull Credentials credentials) {
-        setControlsEnabled(false);
-        _auth.signInWithEmailAndPassword(credentials.email, credentials.password)
-            .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        onAuthorized();
-                    } else {
-                        String failMessage = task.getException().getLocalizedMessage();
-
-                        onErrorCaught(new ErrorReference(ErrorEnum.SIGN_IN_FAIL.id, failMessage));
-                    }
-
-                    setControlsEnabled(true);
-                }
-            });
+    private void adjustUiWithLoadingState(boolean isLoading) {
+        setControlsEnabled(!isLoading);
     }
 
     private void onAuthorized() {
