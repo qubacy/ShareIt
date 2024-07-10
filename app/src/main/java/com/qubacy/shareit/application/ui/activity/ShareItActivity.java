@@ -78,6 +78,7 @@ public class ShareItActivity extends AppCompatActivity implements ErrorBus.Liste
         _model = new ViewModelProvider(this, modelFactory).get(ShareItActivityViewModel.class);
 
         errorBus.setup(this);
+
         setupNavigationDrawer();
     }
 

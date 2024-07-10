@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @IgnoreExtraProperties
 public class IdeaPresentation {
@@ -39,5 +40,20 @@ public class IdeaPresentation {
         map.put(CONTENT_PROP_NAME, content);
 
         return map;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IdeaPresentation that)) return false;
+
+        return Objects.equals(uid, that.uid)
+            && Objects.equals(title, that.title)
+            && Objects.equals(content, that.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid, title, content);
     }
 }

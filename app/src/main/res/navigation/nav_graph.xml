@@ -22,6 +22,5 @@
         android:id="@+id/ideaListFragment"
         android:name="com.qubacy.shareit.application.ui.activity.page.idea.list.IdeaListFragment"
         android:label="@string/fragment_idea_list_label"
-
         tools:layout="@layout/fragment_idea_list" />
 </navigation>

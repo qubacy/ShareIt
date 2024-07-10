@@ -25,11 +25,17 @@
         android:id="@+id/fragment_ideas_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
+        tools:itemCount="10"
+        tools:listitem="@layout/component_idea_list_item"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.qubacy.shareit.application.ui.activity.page.idea.list.component.fab.IdeaListFloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
         android:layout_gravity="bottom|right"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         android:tint="?attr/colorOnPrimaryContainer"

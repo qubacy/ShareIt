@@ -17,12 +17,16 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.qubacy.shareit.application.ui.activity.ShareItActivity;
 import com.qubacy.shareit.application.ui.activity.page._common.stateful.StatefulFragment;
+import com.qubacy.shareit.application.ui.activity.page.idea._common.presentation.IdeaPresentation;
+import com.qubacy.shareit.application.ui.activity.page.idea.list.component.list.adapter.IdeaListRecyclerViewAdapter;
 import com.qubacy.shareit.application.ui.activity.page.idea.list.model._common.IdeaListViewModel;
 import com.qubacy.shareit.application.ui.activity.page.idea.list.model._common.state.IdeaListState;
 import com.qubacy.shareit.application.ui.activity.page.idea.list.model._di.IdeaListViewModelFactoryQualifier;
 import com.qubacy.shareit.databinding.FragmentIdeaListBinding;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -40,6 +44,9 @@ public class IdeaListFragment extends StatefulFragment<IdeaListState, IdeaListVi
     @NotNull
     private OnBackPressedCallback _backPressedCallback;
 
+    @NotNull
+    private IdeaListRecyclerViewAdapter _listAdapter;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +54,7 @@ public class IdeaListFragment extends StatefulFragment<IdeaListState, IdeaListVi
         _model = new ViewModelProvider(this, modelFactory).get(IdeaListViewModel.class);
         _backPressedCallback = new OnBackPressedCallback(true) {
             @Override
-            public void handleOnBackPressed() {
-                // nothing to do..
-            }
+            public void handleOnBackPressed() {}
         };
 
         requireActivity().getOnBackPressedDispatcher().addCallback(_backPressedCallback);
@@ -72,6 +77,7 @@ public class IdeaListFragment extends StatefulFragment<IdeaListState, IdeaListVi
         super.onViewCreated(view, savedInstanceState);
 
         setupTopAppBar();
+        setupList();
     }
 
     @Override
@@ -92,6 +98,19 @@ public class IdeaListFragment extends StatefulFragment<IdeaListState, IdeaListVi
 
         NavigationUI.setupWithNavController(
             toolbar, NavHostFragment.findNavController(this), appBarConfiguration);
+    }
+
+    private void setupList() {
+        _listAdapter = new IdeaListRecyclerViewAdapter();
+
+        _binding.fragmentIdeasList.setAdapter(_listAdapter);
+
+        // todo: delete:
+        _listAdapter.submitList(List.of(
+            new IdeaPresentation("1", "title 1", "content 1"),
+            new IdeaPresentation("2", "title 2", "content 2"),
+            new IdeaPresentation("3", "title 3", "content 3")
+        ));
     }
 
     @Override
