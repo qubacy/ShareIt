@@ -1,6 +1,8 @@
 package com.qubacy.shareit.application.ui.activity._common.page._common.base._common;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -20,6 +22,16 @@ public abstract class ShareItFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onStop() {
+        InputMethodManager inputMethodManager = (InputMethodManager) requireContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputMethodManager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+        super.onStop();
     }
 
     protected void onErrorCaught(@NotNull ErrorReference errorReference) {

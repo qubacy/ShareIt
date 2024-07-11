@@ -10,8 +10,8 @@ import dagger.hilt.android.components.FragmentComponent;
 
 @InstallIn(FragmentComponent.class)
 @Module
-abstract class EmailValidatorModule {
+interface EmailValidatorModule {
     @Binds
     @EmailValidatorQualifier
-    abstract Validator bindEmailValidator(EmailValidatorImpl emailValidator);
+    Validator bindEmailValidator(EmailValidatorImpl emailValidator);
 }

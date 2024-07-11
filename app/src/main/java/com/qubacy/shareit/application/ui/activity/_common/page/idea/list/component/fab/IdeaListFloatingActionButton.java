@@ -10,6 +10,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+@Deprecated
 public class IdeaListFloatingActionButton extends FloatingActionButton {
     @Nullable
     private Integer _initBottomMargin = null;

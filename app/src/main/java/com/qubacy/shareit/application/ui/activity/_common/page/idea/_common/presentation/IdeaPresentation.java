@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.qubacy.shareit.application.ui.activity._common.page.idea.create._common.data.IdeaSketch;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,9 +17,9 @@ import java.util.Objects;
 
 @IgnoreExtraProperties
 public class IdeaPresentation implements Parcelable {
-    static final String UID_PROP_NAME = "uid";
-    static final String TITLE_PROP_NAME = "title";
-    static final String CONTENT_PROP_NAME = "content";
+    public static final String UID_PROP_NAME = "uid";
+    public static final String TITLE_PROP_NAME = "title";
+    public static final String CONTENT_PROP_NAME = "content";
 
     public String uid;
     public String title;
@@ -90,5 +91,12 @@ public class IdeaPresentation implements Parcelable {
         dest.writeString(uid);
         dest.writeString(title);
         dest.writeString(content);
+    }
+
+    public static IdeaPresentation fromIdeaSketch(
+        @NotNull String uid,
+        @NotNull IdeaSketch ideaSketch
+    ) {
+        return new IdeaPresentation(uid, ideaSketch.title, ideaSketch.content);
     }
 }

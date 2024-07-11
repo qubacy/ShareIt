@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.Material3.AppBarLayout"
-        android:fitsSystemWindows="true">
+        style="@style/Widget.Material3.AppBarLayout">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/fragment_ideas_topbar_toolbar"
@@ -39,7 +39,7 @@
         tools:itemCount="10"
         tools:listitem="@layout/component_idea_list_item"/>
 
-    <com.qubacy.shareit.application.ui.activity._common.page.idea.list.component.fab.IdeaListFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fragment_ideas_list_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

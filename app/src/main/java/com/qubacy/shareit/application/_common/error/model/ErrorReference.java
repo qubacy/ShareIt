@@ -6,6 +6,10 @@ public class ErrorReference {
     public final int id;
     public final String cause;
 
+    public ErrorReference(int id) {
+        this(id, null);
+    }
+
     public ErrorReference(
         int id,
         @Nullable String cause
