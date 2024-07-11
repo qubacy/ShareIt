@@ -1,4 +1,4 @@
-package com.qubacy.shareit.application.ui.activity.page._common.base;
+package com.qubacy.shareit.application.ui.activity.page._common.base._common;
 
 import android.os.Bundle;
 
@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import com.qubacy.shareit.application._common.error.bus._common.ErrorBus;
 import com.qubacy.shareit.application._common.error.model.ErrorReference;
 import com.qubacy.shareit.application._common.error.model.ShareItError;
-import com.qubacy.shareit.application.ui.activity.ShareItActivity;
 
 import org.jetbrains.annotations.NotNull;
 

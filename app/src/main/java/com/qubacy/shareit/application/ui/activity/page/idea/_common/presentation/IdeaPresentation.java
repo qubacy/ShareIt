@@ -1,5 +1,10 @@
 package com.qubacy.shareit.application.ui.activity.page.idea._common.presentation;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -10,7 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @IgnoreExtraProperties
-public class IdeaPresentation {
+public class IdeaPresentation implements Parcelable {
     static final String UID_PROP_NAME = "uid";
     static final String TITLE_PROP_NAME = "title";
     static final String CONTENT_PROP_NAME = "content";
@@ -29,6 +34,24 @@ public class IdeaPresentation {
         this.title = title;
         this.content = content;
     }
+
+    protected IdeaPresentation(Parcel in) {
+        uid = in.readString();
+        title = in.readString();
+        content = in.readString();
+    }
+
+    public static final Creator<IdeaPresentation> CREATOR = new Creator<IdeaPresentation>() {
+        @Override
+        public IdeaPresentation createFromParcel(Parcel in) {
+            return new IdeaPresentation(in);
+        }
+
+        @Override
+        public IdeaPresentation[] newArray(int size) {
+            return new IdeaPresentation[size];
+        }
+    };
 
     @Exclude
     @NotNull
@@ -55,5 +78,17 @@ public class IdeaPresentation {
     @Override
     public int hashCode() {
         return Objects.hash(uid, title, content);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(uid);
+        dest.writeString(title);
+        dest.writeString(content);
     }
 }

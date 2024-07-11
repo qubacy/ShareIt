@@ -22,5 +22,18 @@
         android:id="@+id/ideaListFragment"
         android:name="com.qubacy.shareit.application.ui.activity.page.idea.list.IdeaListFragment"
         android:label="@string/fragment_idea_list_label"
-        tools:layout="@layout/fragment_idea_list" />
+        tools:layout="@layout/fragment_idea_list" >
+        <action
+            android:id="@+id/action_ideaListFragment_to_ideaDetailsFragment"
+            app:destination="@id/ideaDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ideaDetailsFragment"
+        android:name="com.qubacy.shareit.application.ui.activity.page.idea.details.IdeaDetailsFragment"
+        android:label="IdeaDetailsFragment"
+        tools:layout="@layout/fragment_idea_details">
+        <argument
+            android:name="idea"
+            app:argType="com.qubacy.shareit.application.ui.activity.page.idea._common.presentation.IdeaPresentation" />
+    </fragment>
 </navigation>

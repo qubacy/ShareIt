@@ -16,8 +16,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.qubacy.shareit.application.ui.activity.ShareItActivity;
-import com.qubacy.shareit.application.ui.activity.page._common.stateful.StatefulFragment;
-import com.qubacy.shareit.application.ui.activity.page.idea._common.presentation.IdeaPresentation;
+import com.qubacy.shareit.application.ui.activity.page._common.base.stateful.StatefulFragment;
+import com.qubacy.shareit.application.ui.activity.page._common.util.topbar.TopBarFragmentUtil;
 import com.qubacy.shareit.application.ui.activity.page.idea.list.component.list.adapter.IdeaListRecyclerViewAdapter;
 import com.qubacy.shareit.application.ui.activity.page.idea.list.model._common.IdeaListViewModel;
 import com.qubacy.shareit.application.ui.activity.page.idea.list.model._common.state.IdeaListState;
@@ -25,8 +25,6 @@ import com.qubacy.shareit.application.ui.activity.page.idea.list.model._di.IdeaL
 import com.qubacy.shareit.databinding.FragmentIdeaListBinding;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -88,16 +86,11 @@ public class IdeaListFragment extends StatefulFragment<IdeaListState, IdeaListVi
     }
 
     private void setupTopAppBar() {
-        final Toolbar toolbar = _binding.fragmentIdeasTopbarToolbar;
-        final DrawerLayout drawerLayout = ((ShareItActivity) requireActivity())
-            .getNavigationDrawerLayout();
-        final AppBarConfiguration appBarConfiguration = new AppBarConfiguration
-            .Builder(ShareItActivity.TOP_LEVEL_DESTINATIONS)
-            .setOpenableLayout(drawerLayout)
-            .build();
-
-        NavigationUI.setupWithNavController(
-            toolbar, NavHostFragment.findNavController(this), appBarConfiguration);
+        TopBarFragmentUtil.setupTopAppBar(
+            (ShareItActivity) requireActivity(),
+            this,
+            _binding.fragmentIdeasTopbarToolbar
+        );
     }
 
     private void setupList() {

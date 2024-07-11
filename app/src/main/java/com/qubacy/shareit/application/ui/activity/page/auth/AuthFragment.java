@@ -21,7 +21,7 @@ import com.qubacy.shareit.R;
 import com.qubacy.shareit.application._common.error.ErrorEnum;
 import com.qubacy.shareit.application._common.error.model.ErrorReference;
 import com.qubacy.shareit.application.ui._common.validator.Validator;
-import com.qubacy.shareit.application.ui.activity.page._common.stateful.StatefulFragment;
+import com.qubacy.shareit.application.ui.activity.page._common.base.stateful.StatefulFragment;
 import com.qubacy.shareit.application.ui.activity.page.auth._common.data.AuthCredentials;
 import com.qubacy.shareit.application.ui.activity.page.auth.model._common.AuthViewModel;
 import com.qubacy.shareit.application.ui.activity.page.auth.model._common.state.AuthState;

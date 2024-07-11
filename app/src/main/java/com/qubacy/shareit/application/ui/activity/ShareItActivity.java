@@ -14,7 +14,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.navigation.NavigationView;
 import com.qubacy.shareit.R;
 import com.qubacy.shareit.application._common.error.bus._common.ErrorBus;
 import com.qubacy.shareit.application._common.error.model.ErrorReference;
@@ -22,7 +21,7 @@ import com.qubacy.shareit.application._common.error.model.ShareItError;
 import com.qubacy.shareit.application.ui.activity.model._common.ShareItActivityViewModel;
 import com.qubacy.shareit.application.ui.activity.model._common.state.ShareItActivityState;
 import com.qubacy.shareit.application.ui.activity.model._di.ShareItActivityViewModelFactoryQualifier;
-import com.qubacy.shareit.application.ui.activity.page._common.base.ShareItFragment;
+import com.qubacy.shareit.application.ui.activity.page._common.base._common.ShareItFragment;
 import com.qubacy.shareit.databinding.ActivityContainerBinding;
 
 import org.jetbrains.annotations.NotNull;
