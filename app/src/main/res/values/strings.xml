@@ -14,4 +14,12 @@
 
     <string name="fragment_idea_list_label">Recent ideas</string>
 
+    <string name="fragment_idea_details_label">Idea details</string>
+
+    <string name="fragment_idea_create_label">New idea</string>
+    <string name="fragment_idea_create_save_button_text">Save</string>
+    <string name="fragment_idea_create_cancel_button_text">Cancel</string>
+    <string name="fragment_idea_create_title_input_hint">Title</string>
+    <string name="fragment_idea_create_content_input_hint">Content</string>
+
 </resources>

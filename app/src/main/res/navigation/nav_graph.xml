@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/authFragment"
-        android:name="com.qubacy.shareit.application.ui.activity.page.auth.AuthFragment"
+        android:name="com.qubacy.shareit.application.ui.activity._common.page.auth.AuthFragment"
         android:label="AuthFragment"
         tools:layout="@layout/fragment_auth">
         <action
@@ -20,20 +20,28 @@
     </fragment>
     <fragment
         android:id="@+id/ideaListFragment"
-        android:name="com.qubacy.shareit.application.ui.activity.page.idea.list.IdeaListFragment"
+        android:name="com.qubacy.shareit.application.ui.activity._common.page.idea.list.IdeaListFragment"
         android:label="@string/fragment_idea_list_label"
         tools:layout="@layout/fragment_idea_list" >
         <action
             android:id="@+id/action_ideaListFragment_to_ideaDetailsFragment"
             app:destination="@id/ideaDetailsFragment" />
+        <action
+            android:id="@+id/action_ideaListFragment_to_ideaCreateFragment"
+            app:destination="@id/ideaCreateFragment" />
     </fragment>
     <fragment
         android:id="@+id/ideaDetailsFragment"
-        android:name="com.qubacy.shareit.application.ui.activity.page.idea.details.IdeaDetailsFragment"
-        android:label="IdeaDetailsFragment"
+        android:name="com.qubacy.shareit.application.ui.activity._common.page.idea.details.IdeaDetailsFragment"
+        android:label="@string/fragment_idea_details_label"
         tools:layout="@layout/fragment_idea_details">
         <argument
             android:name="idea"
-            app:argType="com.qubacy.shareit.application.ui.activity.page.idea._common.presentation.IdeaPresentation" />
+            app:argType="com.qubacy.shareit.application.ui.activity._common.page.idea._common.presentation.IdeaPresentation" />
     </fragment>
+    <fragment
+        android:id="@+id/ideaCreateFragment"
+        android:name="com.qubacy.shareit.application.ui.activity._common.page.idea.create.IdeaCreateFragment"
+        android:label="@string/fragment_idea_create_label"
+        tools:layout="@layout/fragment_idea_create"/>
 </navigation>

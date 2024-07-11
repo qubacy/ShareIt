@@ -39,11 +39,12 @@
         tools:itemCount="10"
         tools:listitem="@layout/component_idea_list_item"/>
 
-    <com.qubacy.shareit.application.ui.activity.page.idea.list.component.fab.IdeaListFloatingActionButton
+    <com.qubacy.shareit.application.ui.activity._common.page.idea.list.component.fab.IdeaListFloatingActionButton
+        android:id="@+id/fragment_ideas_list_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_gravity="bottom|right"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         android:tint="?attr/colorOnPrimaryContainer"
