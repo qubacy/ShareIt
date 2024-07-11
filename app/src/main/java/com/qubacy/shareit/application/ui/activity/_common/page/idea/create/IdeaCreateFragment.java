@@ -14,6 +14,7 @@ import com.qubacy.shareit.application._common.error.ErrorEnum;
 import com.qubacy.shareit.application._common.error.model.ErrorReference;
 import com.qubacy.shareit.application.ui._common.validator.Validator;
 import com.qubacy.shareit.application.ui.activity._common.page._common.base.stateful.StatefulFragment;
+import com.qubacy.shareit.application.ui.activity._common.page._common.util.navigation.NavigationFragmentUtil;
 import com.qubacy.shareit.application.ui.activity._common.page._common.util.topbar.TopBarFragmentUtil;
 import com.qubacy.shareit.application.ui.activity._common.page.idea.create._common.data.IdeaSketch;
 import com.qubacy.shareit.application.ui.activity._common.page.idea.create.model._common.IdeaCreateViewModel;
@@ -32,6 +33,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class IdeaCreateFragment extends StatefulFragment<IdeaCreateState, IdeaCreateViewModel> {
+    public static final String IS_CREATED_RESULT_KEY = "is_created_result";
+
     @IdeaTitleValidatorQualifier
     @Inject
     public Validator ideaTitleValidator;
@@ -124,6 +127,8 @@ public class IdeaCreateFragment extends StatefulFragment<IdeaCreateState, IdeaCr
     }
 
     private void onIdeaCreated() {
+        NavigationFragmentUtil.setDestinationResult(this, IS_CREATED_RESULT_KEY, true);
+
         onFinished();
     }
 

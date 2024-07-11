@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fitsSystemWindows="true">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/fragment_ideas_topbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.Material3.AppBarLayout">
@@ -39,14 +39,14 @@
         tools:itemCount="10"
         tools:listitem="@layout/component_idea_list_item"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.qubacy.shareit.application.ui.activity._common.page.idea.list.component.fab.IdeaListFloatingActionButton
         android:id="@+id/fragment_ideas_list_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_gravity="bottom|right"
-        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        app:layout_behavior=".application.ui.activity._common.page.idea.list.component.fab.behavior.IdeaListFloatingActionButtonBehavior"
         android:tint="?attr/colorOnPrimaryContainer"
         android:src="@drawable/plus"/>
 

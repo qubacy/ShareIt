@@ -13,6 +13,7 @@
     <string name="fragment_auth_sign_up_button_text">Sign Up</string>
 
     <string name="fragment_idea_list_label">Recent ideas</string>
+    <string name="fragment_idea_list_idea_created_snackbar_text">Idea has been created!</string>
 
     <string name="fragment_idea_details_label">Idea details</string>
 
