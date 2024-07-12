@@ -79,8 +79,6 @@ public class IdeaListFragment
         };
 
         requireActivity().getOnBackPressedDispatcher().addCallback(_backPressedCallback);
-
-        setupTransitions();
     }
 
     @Nullable
@@ -111,6 +109,17 @@ public class IdeaListFragment
 
         checkIdeaCreateResult();
         resetLastIdeaDetailsView();
+
+        _model.getRecentIdeas();
+
+        resetToDetailsTransitions();
+    }
+
+    @Override
+    public void onPause() {
+        _model.pause();
+
+        super.onPause();
     }
 
     @Override
@@ -120,7 +129,7 @@ public class IdeaListFragment
         super.onDestroy();
     }
 
-    private void setupTransitions() {
+    private void setupToDetailsTransitions() {
         final MaterialElevationScale exitTransition = new MaterialElevationScale(false);
         final MaterialElevationScale reenterTransition = new MaterialElevationScale(true);
 
@@ -134,6 +143,11 @@ public class IdeaListFragment
 
         setExitTransition(exitTransition);
         setReenterTransition(reenterTransition);
+    }
+
+    private void resetToDetailsTransitions() {
+        setExitTransition(null);
+        setReenterTransition(null);
     }
 
     private void setupInsetListeners() {
@@ -230,6 +244,8 @@ public class IdeaListFragment
 
     @Override
     public void onIdeaClicked(@NotNull IdeaPresentation idea, @NotNull View view) {
+        setupToDetailsTransitions();
+
         final String transitionName = getString(
             R.string.fragment_idea_list_shared_idea_transition_name);
 

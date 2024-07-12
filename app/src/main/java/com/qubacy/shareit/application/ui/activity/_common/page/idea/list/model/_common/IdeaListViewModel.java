@@ -5,4 +5,5 @@ import com.qubacy.shareit.application.ui.activity._common.page.idea.list.model._
 
 public abstract class IdeaListViewModel extends ShareItViewModel<IdeaListState> {
     public abstract void getRecentIdeas();
+    public abstract void pause();
 }

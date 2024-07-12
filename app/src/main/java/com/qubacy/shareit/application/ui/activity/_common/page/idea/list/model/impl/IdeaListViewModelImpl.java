@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.SavedStateHandle;
 
+import com.google.common.collect.Lists;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,7 +55,6 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
         _database = FirebaseDatabase.getInstance(IdeaContext.DATABASE_URL).getReference();
 
         restoreState();
-        getRecentIdeas();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
                         ideas.add(idea.getValue(IdeaPresentation.class));
                     }
 
-                    _stateController.onNext(new IdeaListState(ideas, false));
+                    _stateController.onNext(new IdeaListState(Lists.reverse(ideas), false));
                 }
 
                 @Override
@@ -111,5 +111,11 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
                     _errorBus.emitError(new ErrorReference(ErrorEnum.DATABASE_FAIL.id, error.getMessage()));
                 }
             });
+    }
+
+    @Override
+    public void pause() {
+        if (_recentIdeasListener != null)
+            _database.removeEventListener(_recentIdeasListener);
     }
 }
