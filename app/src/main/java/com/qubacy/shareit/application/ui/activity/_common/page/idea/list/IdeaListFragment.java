@@ -24,8 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.divider.MaterialDividerItemDecoration;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.transition.Hold;
-import com.google.android.material.transition.MaterialContainerTransform;
 import com.google.android.material.transition.MaterialElevationScale;
 import com.qubacy.shareit.NavGraphDirections;
 import com.qubacy.shareit.R;
@@ -43,6 +41,7 @@ import com.qubacy.shareit.databinding.FragmentIdeaListBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -152,7 +151,7 @@ public class IdeaListFragment
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     if (item.getItemId() != R.id.drawer_common_logout) return false;
 
-                    final NavDirections logoutAction = NavGraphDirections.actionGlobalAuthFragment(true);
+                    final NavDirections logoutAction = NavGraphDirections.actionGlobalAuthFragment();
 
                     NavHostFragment.findNavController(fragmentRef).navigate(logoutAction);
 
@@ -267,9 +266,16 @@ public class IdeaListFragment
     protected void processState(@NotNull IdeaListState state) {
         super.processState(state);
 
-        if (state.ideas != null) _listAdapter.submitList(state.ideas);
+        if (state.ideas != null) pushIdeasToList(state.ideas);
 
         adjustUiWithLoadingState(state.isLoading);
+    }
+
+    private void pushIdeasToList(@NotNull List<IdeaPresentation> ideas) {
+        _listAdapter.submitList(ideas, () -> {
+            if (_binding.fragmentIdeasList.getIsAtBeginning())
+                _binding.fragmentIdeasList.scrollToPosition(0);
+        });
     }
 
     private void adjustUiWithLoadingState(boolean isLoading) {

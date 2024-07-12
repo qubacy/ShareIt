@@ -30,7 +30,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
     
-    <androidx.recyclerview.widget.RecyclerView
+    <com.qubacy.shareit.application.ui.activity._common.page.idea.list.component.list.view.IdeaListRecyclerView
         android:id="@+id/fragment_ideas_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
