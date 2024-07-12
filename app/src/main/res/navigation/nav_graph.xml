@@ -21,6 +21,10 @@
             app:exitAnim="@anim/slide_out_left_above"
             app:popEnterAnim="@anim/slide_in_left_above"
             app:popExitAnim="@anim/slide_out_right_below" />
+        <argument
+            android:name="logout"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/ideaListFragment"
@@ -52,4 +56,14 @@
         android:name="com.qubacy.shareit.application.ui.activity._common.page.idea.create.IdeaCreateFragment"
         android:label="@string/fragment_idea_create_label"
         tools:layout="@layout/fragment_idea_create"/>
+    <action
+        android:id="@+id/action_global_authFragment"
+        app:destination="@id/authFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true"
+        app:enterAnim="@anim/slide_out_left_above"
+        app:exitAnim="@anim/slide_in_right_below"
+        app:popEnterAnim="@anim/slide_out_right_below"
+        app:popExitAnim="@anim/slide_in_left_above"/>
 </navigation>

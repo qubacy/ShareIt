@@ -2,8 +2,10 @@ package com.qubacy.shareit.application.ui.activity._common.page.idea.list;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import androidx.activity.OnBackPressedCallback;
@@ -11,18 +13,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigator;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.divider.MaterialDividerItemDecoration;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.transition.Hold;
 import com.google.android.material.transition.MaterialContainerTransform;
 import com.google.android.material.transition.MaterialElevationScale;
+import com.qubacy.shareit.NavGraphDirections;
 import com.qubacy.shareit.R;
 import com.qubacy.shareit.application.ui.activity._common.page._common.base.stateful.StatefulFragment;
 import com.qubacy.shareit.application.ui.activity._common.page._common.util.navigation.NavigationFragmentUtil;
@@ -98,6 +103,7 @@ public class IdeaListFragment
         super.onViewCreated(view, savedInstanceState);
 
         setupTopAppBar();
+        setupNavDrawer();
         setupList();
         setupControls();
         setupInsetListeners();
@@ -110,8 +116,16 @@ public class IdeaListFragment
         checkIdeaCreateResult();
         resetLastIdeaDetailsView();
 
-        _model.getRecentIdeas();
+        // todo: does it matter actually? check it twice:
+        requireView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                _model.getRecentIdeas();
+                requireView().getViewTreeObserver().removeOnPreDrawListener(this);
 
+                return true;
+            }
+        });
         resetToDetailsTransitions();
     }
 
@@ -127,6 +141,24 @@ public class IdeaListFragment
         _backPressedCallback.remove();
 
         super.onDestroy();
+    }
+
+    private void setupNavDrawer() {
+        final Fragment fragmentRef = this;
+
+        ((ShareItActivity) requireActivity()).getNavigationDrawer()
+            .setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    if (item.getItemId() != R.id.drawer_common_logout) return false;
+
+                    final NavDirections logoutAction = NavGraphDirections.actionGlobalAuthFragment(true);
+
+                    NavHostFragment.findNavController(fragmentRef).navigate(logoutAction);
+
+                    return true;
+                }
+            });
     }
 
     private void setupToDetailsTransitions() {
@@ -204,12 +236,15 @@ public class IdeaListFragment
     private void setupList() {
         _listAdapter = new IdeaListRecyclerViewAdapter(this);
 
+        final RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+
         _binding.fragmentIdeasList.addItemDecoration(
             new MaterialDividerItemDecoration(
                 requireContext(), MaterialDividerItemDecoration.VERTICAL
             )
         );
         _binding.fragmentIdeasList.setAdapter(_listAdapter);
+        _binding.fragmentIdeasList.setItemAnimator(itemAnimator);
     }
 
     private void setupControls() {

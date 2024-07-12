@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.navigation.NavigationView;
 import com.qubacy.shareit.R;
 import com.qubacy.shareit.application._common.error.bus._common.ErrorBus;
 import com.qubacy.shareit.application._common.error.model.ErrorReference;
@@ -104,6 +105,10 @@ public class ShareItActivity extends AppCompatActivity implements ErrorBus.Liste
 
     public DrawerLayout getNavigationDrawerLayout() {
         return _binding.getRoot();
+    }
+
+    public NavigationView getNavigationDrawer() {
+        return _binding.activityContainerDrawer;
     }
 
     private void setupNavigationDrawer() {

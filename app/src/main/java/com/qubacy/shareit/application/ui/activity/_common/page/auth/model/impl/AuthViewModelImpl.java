@@ -32,6 +32,8 @@ public class AuthViewModelImpl extends AuthViewModel {
 
     @NotNull
     private final FirebaseAuth _auth;
+    @NotNull
+    private FirebaseAuth.AuthStateListener _authStateListener;
 
     public AuthViewModelImpl(
         @NotNull SavedStateHandle store,
@@ -47,12 +49,14 @@ public class AuthViewModelImpl extends AuthViewModel {
         _auth = FirebaseAuth.getInstance();
 
         restoreState();
-        checkAuth();
+        setupAuthStateListener();
     }
 
     @Override
     protected void onCleared() {
         preserveState();
+
+        _auth.removeAuthStateListener(_authStateListener);
 
         super.onCleared();
     }
@@ -71,7 +75,21 @@ public class AuthViewModelImpl extends AuthViewModel {
         _store.set(STATE_KEY, lastState);
     }
 
-    private void checkAuth() {
+    private void setupAuthStateListener() {
+        _authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                final boolean isSignedIn = firebaseAuth.getCurrentUser() != null;
+
+                _stateController.onNext(new AuthState(isSignedIn, false));
+            }
+        };
+
+        _auth.addAuthStateListener(_authStateListener);
+    }
+
+    @Override
+    public void checkAuth() {
         FirebaseUser currentUser = _auth.getCurrentUser();
 
         if (currentUser != null)
@@ -91,17 +109,12 @@ public class AuthViewModelImpl extends AuthViewModel {
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    boolean isAuthorized = false;
-
-                    if (task.isSuccessful()) {
-                        isAuthorized = true;
-                    } else {
+                    if (!task.isSuccessful()) {
                         String failMessage = task.getException().getLocalizedMessage();
 
+                        _stateController.onNext(new AuthState(false, false));
                         _errorBus.emitError(new ErrorReference(ErrorEnum.SIGN_UP_FAIL.id, failMessage));
                     }
-
-                    _stateController.onNext(new AuthState(isAuthorized, false));
                 }
             });
     }
@@ -114,18 +127,18 @@ public class AuthViewModelImpl extends AuthViewModel {
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    boolean isAuthorized = false;
-
-                    if (task.isSuccessful()) {
-                        isAuthorized = true;
-                    } else {
+                    if (!task.isSuccessful())  {
                         String failMessage = task.getException().getLocalizedMessage();
 
+                        _stateController.onNext(new AuthState(false, false));
                         _errorBus.emitError(new ErrorReference(ErrorEnum.SIGN_UP_FAIL.id, failMessage));
                     }
-
-                    _stateController.onNext(new AuthState(isAuthorized, false));
                 }
             });
+    }
+
+    @Override
+    public void logout() {
+        _auth.signOut();
     }
 }

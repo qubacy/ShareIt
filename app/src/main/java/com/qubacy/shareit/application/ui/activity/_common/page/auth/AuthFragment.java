@@ -12,6 +12,7 @@ import android.view.animation.AccelerateInterpolator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavArgs;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
@@ -51,6 +52,8 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
     @Inject
     public Validator passwordValidator;
 
+    private AuthFragmentArgs _navArgs;
+
     private AuthViewModel _viewModel;
     private FragmentAuthBinding _binding;
 
@@ -68,6 +71,7 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
 
         _viewModel = new ViewModelProvider(this, viewModelFactory)
             .get(AuthViewModel.class);
+        _navArgs = AuthFragmentArgs.fromBundle(getArguments());
     }
 
     @Nullable
@@ -93,6 +97,9 @@ public class AuthFragment extends StatefulFragment<AuthState, AuthViewModel> {
     @Override
     public void onStart() {
         super.onStart();
+
+        if (!_navArgs.getLogout()) _viewModel.checkAuth();
+        else _viewModel.logout();
     }
 
     private void setupHeader() {
