@@ -1,5 +1,7 @@
 package com.qubacy.shareit.application.ui.activity._common.page.idea.list.model.impl;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.SavedStateHandle;
@@ -26,6 +28,7 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 public class IdeaListViewModelImpl extends IdeaListViewModel {
+    static final String TAG = "IdeaListViewModelImpl";
     static final String STATE_KEY = "STATE";
 
     static final int IDEA_COUNT_LIMIT = 20;
@@ -94,6 +97,8 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
             .addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Log.d(TAG, "getRecentIdeas(): onDataChange(): entering..");
+
                     final ArrayList<IdeaPresentation> ideas = new ArrayList<>();
 
                     for (final DataSnapshot idea : snapshot.getChildren()) {
@@ -116,6 +121,6 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
     @Override
     public void pause() {
         if (_recentIdeasListener != null)
-            _database.removeEventListener(_recentIdeasListener);
+            _database.child(IdeaContext.IDEAS_PATH).removeEventListener(_recentIdeasListener);
     }
 }
