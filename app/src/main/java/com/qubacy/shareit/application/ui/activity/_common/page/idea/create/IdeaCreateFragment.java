@@ -124,6 +124,8 @@ public class IdeaCreateFragment extends StatefulFragment<IdeaCreateState, IdeaCr
     private void adjustUiWithLoadingState(boolean isLoading) {
         _binding.fragmentIdeaCreateTopbarProgressIndicator
             .setVisibility(isLoading ? View.VISIBLE : View.INVISIBLE);
+        _binding.fragmentIdeaCreateSaveButton.setEnabled(!isLoading);
+        _binding.fragmentIdeaCreateCancelButton.setEnabled(!isLoading);
     }
 
     private void onIdeaCreated() {

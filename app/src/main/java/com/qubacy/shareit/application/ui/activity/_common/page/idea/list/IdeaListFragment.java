@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -12,9 +13,16 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigator;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.material.divider.MaterialDividerItemDecoration;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.transition.Hold;
+import com.google.android.material.transition.MaterialContainerTransform;
+import com.google.android.material.transition.MaterialElevationScale;
 import com.qubacy.shareit.R;
 import com.qubacy.shareit.application.ui.activity._common.page._common.base.stateful.StatefulFragment;
 import com.qubacy.shareit.application.ui.activity._common.page._common.util.navigation.NavigationFragmentUtil;
@@ -29,6 +37,8 @@ import com.qubacy.shareit.application.ui.activity.main.ShareItActivity;
 import com.qubacy.shareit.databinding.FragmentIdeaListBinding;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -52,6 +62,9 @@ public class IdeaListFragment
     @NotNull
     private IdeaListRecyclerViewAdapter _listAdapter;
 
+    @Nullable
+    private View _lastIdeaDetailsView = null;
+
     private Integer _initAppBarLayoutTopPadding = null;
     private Integer _initListBottomPadding = null;
 
@@ -66,6 +79,8 @@ public class IdeaListFragment
         };
 
         requireActivity().getOnBackPressedDispatcher().addCallback(_backPressedCallback);
+
+        setupTransitions();
     }
 
     @Nullable
@@ -95,6 +110,7 @@ public class IdeaListFragment
         super.onResume();
 
         checkIdeaCreateResult();
+        resetLastIdeaDetailsView();
     }
 
     @Override
@@ -102,6 +118,22 @@ public class IdeaListFragment
         _backPressedCallback.remove();
 
         super.onDestroy();
+    }
+
+    private void setupTransitions() {
+        final MaterialElevationScale exitTransition = new MaterialElevationScale(false);
+        final MaterialElevationScale reenterTransition = new MaterialElevationScale(true);
+
+        final int transitionDuration = requireContext().getResources()
+            .getInteger(R.integer.page_transition_animation_duration);
+
+        exitTransition.setDuration(transitionDuration);
+        exitTransition.setInterpolator(new AccelerateDecelerateInterpolator());
+        reenterTransition.setDuration(transitionDuration);
+        reenterTransition.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        setExitTransition(exitTransition);
+        setReenterTransition(reenterTransition);
     }
 
     private void setupInsetListeners() {
@@ -128,6 +160,12 @@ public class IdeaListFragment
         });
     }
 
+    private void resetLastIdeaDetailsView() {
+        if (_lastIdeaDetailsView == null) return;
+
+        _lastIdeaDetailsView.setTransitionName(null);
+    }
+
     private void checkIdeaCreateResult() {
         Object isIdeaCreated = NavigationFragmentUtil
             .getPrevDestinationResult(this, IdeaCreateFragment.IS_CREATED_RESULT_KEY);
@@ -152,6 +190,11 @@ public class IdeaListFragment
     private void setupList() {
         _listAdapter = new IdeaListRecyclerViewAdapter(this);
 
+        _binding.fragmentIdeasList.addItemDecoration(
+            new MaterialDividerItemDecoration(
+                requireContext(), MaterialDividerItemDecoration.VERTICAL
+            )
+        );
         _binding.fragmentIdeasList.setAdapter(_listAdapter);
     }
 
@@ -186,10 +229,19 @@ public class IdeaListFragment
     }
 
     @Override
-    public void onIdeaClicked(@NotNull IdeaPresentation idea) {
+    public void onIdeaClicked(@NotNull IdeaPresentation idea, @NotNull View view) {
+        final String transitionName = getString(
+            R.string.fragment_idea_list_shared_idea_transition_name);
+
+        _lastIdeaDetailsView = view;
+        _lastIdeaDetailsView.setTransitionName(transitionName);
+
         final NavDirections action = IdeaListFragmentDirections
             .actionIdeaListFragmentToIdeaDetailsFragment(idea);
+        final FragmentNavigator.Extras extras = new FragmentNavigator.Extras(
+            Map.of(view, transitionName)
+        );
 
-        NavHostFragment.findNavController(this).navigate(action);
+        NavHostFragment.findNavController(this).navigate(action, extras);
     }
 }

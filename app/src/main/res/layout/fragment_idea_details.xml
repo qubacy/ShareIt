@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:transitionName="@string/fragment_idea_list_shared_idea_transition_name">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

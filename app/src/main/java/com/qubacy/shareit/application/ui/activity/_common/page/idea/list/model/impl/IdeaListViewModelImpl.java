@@ -88,6 +88,8 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
 
     @Override
     public void getRecentIdeas() {
+        _stateController.onNext(new IdeaListState(null, true));
+
         _recentIdeasListener = _database.child(IdeaContext.IDEAS_PATH).limitToLast(IDEA_COUNT_LIMIT)
             .addValueEventListener(new ValueEventListener() {
                 @Override
@@ -105,6 +107,7 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
                 public void onCancelled(@NonNull DatabaseError error) {
                     if (error.getCode() == DatabaseError.WRITE_CANCELED) return;
 
+                    _stateController.onNext(new IdeaListState(null, false));
                     _errorBus.emitError(new ErrorReference(ErrorEnum.DATABASE_FAIL.id, error.getMessage()));
                 }
             });

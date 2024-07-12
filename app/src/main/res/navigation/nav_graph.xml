@@ -16,7 +16,11 @@
             app:destination="@id/ideaListFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right_below"
+            app:exitAnim="@anim/slide_out_left_above"
+            app:popEnterAnim="@anim/slide_in_left_above"
+            app:popExitAnim="@anim/slide_out_right_below" />
     </fragment>
     <fragment
         android:id="@+id/ideaListFragment"
@@ -28,7 +32,11 @@
             app:destination="@id/ideaDetailsFragment" />
         <action
             android:id="@+id/action_ideaListFragment_to_ideaCreateFragment"
-            app:destination="@id/ideaCreateFragment" />
+            app:destination="@id/ideaCreateFragment"
+            app:enterAnim="@anim/slide_in_right_below"
+            app:exitAnim="@anim/slide_out_left_above"
+            app:popEnterAnim="@anim/slide_in_left_above"
+            app:popExitAnim="@anim/slide_out_right_below" />
     </fragment>
     <fragment
         android:id="@+id/ideaDetailsFragment"

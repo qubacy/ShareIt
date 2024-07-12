@@ -1,13 +1,18 @@
 package com.qubacy.shareit.application.ui.activity._common.page.idea.details;
 
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.transition.MaterialContainerTransform;
+import com.qubacy.shareit.R;
 import com.qubacy.shareit.application.ui.activity._common.page._common.base._common.ShareItFragment;
 import com.qubacy.shareit.application.ui.activity._common.page._common.util.topbar.TopBarFragmentUtil;
 import com.qubacy.shareit.application.ui.activity._common.page.idea._common.presentation.IdeaPresentation;
@@ -25,6 +30,7 @@ public class IdeaDetailsFragment extends ShareItFragment {
         super.onCreate(savedInstanceState);
 
         retrieveNavArgs();
+        setupTransitions();
     }
 
     @Nullable
@@ -45,6 +51,20 @@ public class IdeaDetailsFragment extends ShareItFragment {
 
         setupTopAppBar();
         adjustUiWithIdea(_navArgs.getIdea());
+    }
+
+    private void setupTransitions() {
+        final MaterialContainerTransform materialContainerTransform =
+            new MaterialContainerTransform(requireContext(), true);
+
+        final int transitionDuration = requireContext().getResources()
+            .getInteger(R.integer.page_transition_animation_duration);
+
+        materialContainerTransform.setScrimColor(Color.TRANSPARENT);
+        materialContainerTransform.setDuration(transitionDuration);
+        materialContainerTransform.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        setSharedElementEnterTransition(materialContainerTransform);
     }
 
     private void setupTopAppBar() {

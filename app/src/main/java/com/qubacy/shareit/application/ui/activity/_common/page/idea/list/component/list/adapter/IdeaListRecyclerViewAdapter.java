@@ -21,7 +21,7 @@ public class IdeaListRecyclerViewAdapter extends ListAdapter<
     IdeaListRecyclerViewAdapter.ViewHolder
 > {
     public interface Callback {
-        void onIdeaClicked(@NotNull IdeaPresentation idea);
+        void onIdeaClicked(@NotNull IdeaPresentation idea, @NotNull View view);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -86,7 +86,7 @@ public class IdeaListRecyclerViewAdapter extends ListAdapter<
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _callback.onIdeaClicked(item);
+                _callback.onIdeaClicked(item, v);
             }
         });
     }

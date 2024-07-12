@@ -14,6 +14,7 @@
 
     <string name="fragment_idea_list_label">Recent ideas</string>
     <string name="fragment_idea_list_idea_created_snackbar_text">Idea has been created!</string>
+    <string name="fragment_idea_list_shared_idea_transition_name">sharedIdea</string>
 
     <string name="fragment_idea_details_label">Idea details</string>
 
