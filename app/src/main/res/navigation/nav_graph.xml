@@ -62,8 +62,6 @@
         app:launchSingleTop="true"
         app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true"
-        app:enterAnim="@anim/slide_out_left_above"
-        app:exitAnim="@anim/slide_in_right_below"
-        app:popEnterAnim="@anim/slide_out_right_below"
-        app:popExitAnim="@anim/slide_in_left_above"/>
+        app:enterAnim="@anim/slide_in_left_above"
+        app:exitAnim="@anim/slide_out_right_below"/>
 </navigation>

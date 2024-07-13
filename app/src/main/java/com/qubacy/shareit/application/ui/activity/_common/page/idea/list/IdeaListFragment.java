@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
@@ -144,20 +145,26 @@ public class IdeaListFragment
 
     private void setupNavDrawer() {
         final Fragment fragmentRef = this;
+        final ShareItActivity shareItActivity = (ShareItActivity) requireActivity();
+        final NavigationView navigationView = shareItActivity.getNavigationDrawer();
+        final DrawerLayout drawerLayout = shareItActivity.getNavigationDrawerLayout();
 
-        ((ShareItActivity) requireActivity()).getNavigationDrawer()
-            .setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    if (item.getItemId() != R.id.drawer_common_logout) return false;
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() != R.id.drawer_common_logout) return false;
 
-                    final NavDirections logoutAction = NavGraphDirections.actionGlobalAuthFragment();
+                final NavGraphDirections.ActionGlobalAuthFragment logoutAction =
+                    NavGraphDirections.actionGlobalAuthFragment();
 
-                    NavHostFragment.findNavController(fragmentRef).navigate(logoutAction);
+                logoutAction.setLogout(true);
 
-                    return true;
-                }
-            });
+                NavHostFragment.findNavController(fragmentRef).navigate(logoutAction);
+                drawerLayout.close();
+
+                return true;
+            }
+        });
     }
 
     private void setupToDetailsTransitions() {
