@@ -7,6 +7,7 @@ import com.qubacy.shareit.application._common.exception.ShareItException;
 
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
 public class ErrorHandler implements Thread.UncaughtExceptionHandler {
     public interface Callback {
         void onErrorCaught(@NotNull ErrorReference errorReference);

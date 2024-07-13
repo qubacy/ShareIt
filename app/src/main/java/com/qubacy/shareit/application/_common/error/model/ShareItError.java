@@ -10,6 +10,8 @@ import com.qubacy.shareit.application.data.error.repository.source.local.databas
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class ShareItError implements Parcelable {
     public final long id;
     public final String message;
@@ -53,6 +55,19 @@ public class ShareItError implements Parcelable {
         dest.writeLong(id);
         dest.writeString(message);
         dest.writeByte((byte) (isCritical ? 1 : 0));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ShareItError that)) return false;
+
+        return id == that.id && isCritical == that.isCritical && Objects.equals(message, that.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, message, isCritical);
     }
 
     public static ShareItError fromErrorDatabaseView(

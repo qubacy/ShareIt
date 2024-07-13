@@ -36,4 +36,17 @@ public class ErrorDatabaseView {
     public String localization;
     @ColumnInfo(name = IS_CRITICAL_PROP_NAME)
     public boolean isCritical;
+
+    public ErrorDatabaseView() {}
+    public ErrorDatabaseView(
+        long id,
+        @NotNull String lang,
+        @NotNull String localization,
+        boolean isCritical
+    ) {
+        this.id = id;
+        this.lang = lang;
+        this.localization = localization;
+        this.isCritical = isCritical;
+    }
 }
