@@ -2,6 +2,7 @@ package com.qubacy.shareit.application.ui.activity._common.page.auth.model._di.m
 
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.qubacy.shareit.application._common.error.bus._common.ErrorBus;
 import com.qubacy.shareit.application.ui.activity._common.page.auth.model.impl.factory.AuthViewModelImplFactory;
 
@@ -18,6 +19,8 @@ public abstract class AuthViewModelModule {
     static ViewModelProvider.Factory provideAuthViewModelFactory(
         ErrorBus errorBus
     ) {
-        return new AuthViewModelImplFactory(errorBus);
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        return new AuthViewModelImplFactory(errorBus, firebaseAuth);
     }
 }

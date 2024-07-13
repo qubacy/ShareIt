@@ -3,7 +3,6 @@ package com.qubacy.shareit.application.ui.activity._common.page.auth.model.impl;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.SavedStateHandle;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,15 +28,16 @@ public class AuthViewModelImpl extends AuthViewModel {
     private final SavedStateHandle _store;
     @NotNull
     private final ErrorBus _errorBus;
-
     @NotNull
     private final FirebaseAuth _auth;
+
     @NotNull
     private FirebaseAuth.AuthStateListener _authStateListener;
 
     public AuthViewModelImpl(
         @NotNull SavedStateHandle store,
-        @NotNull ErrorBus errorBus
+        @NotNull ErrorBus errorBus,
+        @NotNull FirebaseAuth firebaseAuth
     ) {
         super();
 
@@ -45,8 +45,7 @@ public class AuthViewModelImpl extends AuthViewModel {
             .createDefault(new AuthState(false, false));
         _store = store;
         _errorBus = errorBus;
-
-        _auth = FirebaseAuth.getInstance();
+        _auth = firebaseAuth;
 
         restoreState();
         setupAuthStateListener();
@@ -106,17 +105,7 @@ public class AuthViewModelImpl extends AuthViewModel {
         _stateController.onNext(new AuthState(false, true));
 
         _auth.signInWithEmailAndPassword(authCredentials.email, authCredentials.password)
-            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (!task.isSuccessful()) {
-                        String failMessage = task.getException().getLocalizedMessage();
-
-                        _stateController.onNext(new AuthState(false, false));
-                        _errorBus.emitError(new ErrorReference(ErrorEnum.SIGN_UP_FAIL.id, failMessage));
-                    }
-                }
-            });
+            .addOnCompleteListener(this::onSignInComplete);
     }
 
     @Override
@@ -124,21 +113,29 @@ public class AuthViewModelImpl extends AuthViewModel {
         _stateController.onNext(new AuthState(false, true));
 
         _auth.createUserWithEmailAndPassword(authCredentials.email, authCredentials.password)
-            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (!task.isSuccessful())  {
-                        String failMessage = task.getException().getLocalizedMessage();
-
-                        _stateController.onNext(new AuthState(false, false));
-                        _errorBus.emitError(new ErrorReference(ErrorEnum.SIGN_UP_FAIL.id, failMessage));
-                    }
-                }
-            });
+            .addOnCompleteListener(this::onSignUpComplete);
     }
 
     @Override
     public void logout() {
         _auth.signOut();
+    }
+
+    private void onSignInComplete(@NonNull Task<AuthResult> task) {
+        if (task.isSuccessful()) return;
+
+        String failMessage = task.getException().getLocalizedMessage();
+
+        _stateController.onNext(new AuthState(false, false));
+        _errorBus.emitError(new ErrorReference(ErrorEnum.SIGN_IN_FAIL.id, failMessage));
+    }
+
+    private void onSignUpComplete(@NonNull Task<AuthResult> task) {
+        if (task.isSuccessful()) return;
+
+        String failMessage = task.getException().getLocalizedMessage();
+
+        _stateController.onNext(new AuthState(false, false));
+        _errorBus.emitError(new ErrorReference(ErrorEnum.SIGN_UP_FAIL.id, failMessage));
     }
 }

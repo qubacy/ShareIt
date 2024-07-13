@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 
 import com.qubacy.shareit.application.ui.activity._common.model.base.state.ShareItState;
 
+import java.util.Objects;
+
 public class AuthState extends ShareItState implements Parcelable {
     public final boolean isAuthorized;
     public final boolean isLoading;
@@ -45,5 +47,18 @@ public class AuthState extends ShareItState implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeByte((byte) (isAuthorized ? 1 : 0));
         dest.writeByte((byte) (isLoading ? 1 : 0));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AuthState authState)) return false;
+
+        return isAuthorized == authState.isAuthorized && isLoading == authState.isLoading;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isAuthorized, isLoading);
     }
 }
