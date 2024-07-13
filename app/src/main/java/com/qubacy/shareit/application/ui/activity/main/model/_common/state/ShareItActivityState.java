@@ -10,6 +10,8 @@ import com.qubacy.shareit.application.ui.activity._common.model.base.state.Share
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class ShareItActivityState extends ShareItState implements Parcelable {
     @Nullable
     public final ShareItError error;
@@ -44,5 +46,18 @@ public class ShareItActivityState extends ShareItState implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeParcelable(error, flags);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ShareItActivityState that)) return false;
+
+        return Objects.equals(error, that.error);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(error);
     }
 }

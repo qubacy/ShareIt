@@ -43,7 +43,7 @@ public class ShareItActivityViewModelImpl extends ShareItActivityViewModel {
 
     @Override
     protected void onCleared() {
-        _store.set(STATE_KEY, _stateController.getValue());
+        preserveState();
 
         if (_errorSubscription != null) _errorSubscription.dispose();
 
@@ -56,6 +56,10 @@ public class ShareItActivityViewModelImpl extends ShareItActivityViewModel {
         final ShareItActivityState preservedState = _store.get(STATE_KEY);
 
         _stateController.onNext(preservedState);
+    }
+
+    private void preserveState() {
+        _store.set(STATE_KEY, _stateController.getValue());
     }
 
     @Override
