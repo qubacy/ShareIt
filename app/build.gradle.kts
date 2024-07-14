@@ -16,7 +16,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.qubacy.shareit._test.runner.ShareItTestRunner"
     }
 
     buildTypes {
@@ -76,4 +76,6 @@ dependencies {
     androidTestImplementation("androidx.fragment:fragment-testing:1.8.1")
     androidTestImplementation("org.mockito:mockito-android:5.7.0")
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
+    androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:$hiltVersion")
 }

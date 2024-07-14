@@ -13,7 +13,7 @@ import dagger.hilt.android.components.FragmentComponent;
 
 @InstallIn(FragmentComponent.class)
 @Module
-public abstract class AuthViewModelModule {
+public abstract class AuthViewModelFactoryModule {
     @AuthViewModelFactoryQualifier
     @Provides
     static ViewModelProvider.Factory provideAuthViewModelFactory(
