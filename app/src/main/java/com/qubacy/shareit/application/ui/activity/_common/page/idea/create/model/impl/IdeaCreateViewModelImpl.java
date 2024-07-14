@@ -3,7 +3,6 @@ package com.qubacy.shareit.application.ui.activity._common.page.idea.create.mode
 import androidx.lifecycle.SavedStateHandle;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.qubacy.shareit.application._common.error.ErrorEnum;
 import com.qubacy.shareit.application._common.error.bus._common.ErrorBus;
 import com.qubacy.shareit.application._common.error.model.ErrorReference;
@@ -27,19 +26,18 @@ public class IdeaCreateViewModelImpl extends IdeaCreateViewModel {
     private final SavedStateHandle _store;
     private final BehaviorSubject<IdeaCreateState> _stateController;
     private final ErrorBus _errorBus;
-
     private final DatabaseReference _database;
 
     public IdeaCreateViewModelImpl(
         @NotNull SavedStateHandle store,
-        @NotNull ErrorBus errorBus
+        @NotNull ErrorBus errorBus,
+        @NotNull DatabaseReference database
     ) {
         _store = store;
         _stateController = BehaviorSubject.createDefault(
             new IdeaCreateState(false, false));
         _errorBus = errorBus;
-
-        _database = FirebaseDatabase.getInstance(IdeaContext.DATABASE_URL).getReference();
+        _database = database;
 
         restoreState();
     }
@@ -85,12 +83,16 @@ public class IdeaCreateViewModelImpl extends IdeaCreateViewModel {
         updateMap.put(updatePath, ideaMap);
 
         _database.updateChildren(updateMap)
-            .addOnSuccessListener(unused -> {
-                _stateController.onNext(new IdeaCreateState(false, true));
-            })
-            .addOnFailureListener(e -> {
-                _errorBus.emitError(new ErrorReference(ErrorEnum.DATABASE_FAIL.id, e.getMessage()));
-                _stateController.onNext(new IdeaCreateState(false, false));
-            });
+            .addOnSuccessListener(unused -> onIdeaCreated())
+            .addOnFailureListener(this::onIdeaCreatingFailed);
+    }
+
+    private void onIdeaCreated() {
+        _stateController.onNext(new IdeaCreateState(false, true));
+    }
+
+    private void onIdeaCreatingFailed(@NotNull Exception exception) {
+        _errorBus.emitError(new ErrorReference(ErrorEnum.DATABASE_FAIL.id, exception.getMessage()));
+        _stateController.onNext(new IdeaCreateState(false, false));
     }
 }

@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.qubacy.shareit.application.ui.activity._common.model.base.state.ShareItState;
 
+import java.util.Objects;
+
 public class IdeaCreateState extends ShareItState implements Parcelable {
     public final boolean isLoading;
     public final boolean isCreated;
@@ -44,4 +46,19 @@ public class IdeaCreateState extends ShareItState implements Parcelable {
             return new IdeaCreateState[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        IdeaCreateState that = (IdeaCreateState) o;
+
+        return isLoading == that.isLoading && isCreated == that.isCreated;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isLoading, isCreated);
+    }
 }
