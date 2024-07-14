@@ -206,16 +206,109 @@ public class AuthViewModelImplTest {
 
     @Test
     public void signUpTest() {
+        final AuthCredentials authCredentials = new AuthCredentials("test", "test");
 
+        final AuthState expectedState = new AuthState(false, true);
+
+        final Task<AuthResult> authTaskMock = Mockito.mock(Task.class);
+
+        Mockito.when(_firebaseAuthMock.createUserWithEmailAndPassword(
+            Mockito.anyString(), Mockito.anyString())
+        ).thenReturn(authTaskMock);
+
+        final AuthViewModelImpl authViewModel = new AuthViewModelImpl(
+            _savedStateHandleMock, _errorBusMock, _firebaseAuthMock);
+
+        authViewModel.signUp(authCredentials);
+
+        final AuthState gottenState = authViewModel.getState().blockingFirst();
+
+        Mockito.verify(_firebaseAuthMock)
+            .createUserWithEmailAndPassword(Mockito.anyString(), Mockito.anyString());
+        Mockito.verify(authTaskMock).addOnCompleteListener(Mockito.any());
+
+        Assert.assertEquals(expectedState, gottenState);
     }
 
     @Test
-    public void onSignUpCompleteTest() {
+    public void onSignUpCompleteTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        final Method onSignUpCompleteMethodReflection = AuthViewModelImpl.class
+                .getDeclaredMethod("onSignUpComplete", Task.class);
 
+        onSignUpCompleteMethodReflection.setAccessible(true);
+
+        final String failMessage = "test";
+
+        final AuthState expectedState = new AuthState(false, false);
+        final ErrorReference expectedErrorReference =
+            new ErrorReference(ErrorEnum.SIGN_UP_FAIL.id, failMessage);
+
+        final Exception exceptionMock = Mockito.mock(Exception.class);
+
+        Mockito.when(exceptionMock.getLocalizedMessage()).thenReturn(failMessage);
+
+        final Task<AuthResult> authTaskMock = Mockito.mock(Task.class);
+
+        Mockito.when(authTaskMock.isSuccessful()).thenReturn(false);
+        Mockito.when(authTaskMock.getException()).thenReturn(exceptionMock);
+
+        final AtomicReference<ErrorReference> gottenErrorReference = new AtomicReference<>();
+
+        Mockito.doAnswer((invocation -> {
+            gottenErrorReference.set(invocation.getArgument(0));
+
+            return null;
+        })).when(_errorBusMock).emitError(Mockito.any());
+
+        final AuthViewModelImpl authViewModel = new AuthViewModelImpl(
+            _savedStateHandleMock, _errorBusMock, _firebaseAuthMock);
+
+        onSignUpCompleteMethodReflection.invoke(authViewModel, authTaskMock);
+
+        final AuthState gottenState = authViewModel.getState().blockingFirst();
+
+        Mockito.verify(authTaskMock).getException();
+        Mockito.verify(exceptionMock).getLocalizedMessage();
+
+        Assert.assertEquals(expectedState, gottenState);
+        Assert.assertEquals(expectedErrorReference, gottenErrorReference.get());
     }
 
     @Test
     public void logoutTest() {
+        final AuthViewModelImpl authViewModel = new AuthViewModelImpl(
+            _savedStateHandleMock, _errorBusMock, _firebaseAuthMock);
 
+        authViewModel.logout();
+
+        Mockito.verify(_firebaseAuthMock).signOut();
+    }
+
+    @Test
+    public void onAuthStateChangedTest() throws NoSuchFieldException, IllegalAccessException {
+        final Field authStateListenerFieldReflection = AuthViewModelImpl.class
+            .getDeclaredField("_authStateListener");
+
+        authStateListenerFieldReflection.setAccessible(true);
+
+        final AuthState expectedState = new AuthState(true, false);
+
+        final FirebaseUser firebaseUserMock = Mockito.mock(FirebaseUser.class);
+
+        final FirebaseAuth firebaseAuthMock = Mockito.mock(FirebaseAuth.class);
+
+        Mockito.when(firebaseAuthMock.getCurrentUser()).thenReturn(firebaseUserMock);
+
+        final AuthViewModelImpl authViewModel = new AuthViewModelImpl(
+            _savedStateHandleMock, _errorBusMock, _firebaseAuthMock);
+
+        ((FirebaseAuth.AuthStateListener) authStateListenerFieldReflection.get(authViewModel))
+            .onAuthStateChanged(firebaseAuthMock);
+
+        final AuthState gottenState = authViewModel.getState().blockingFirst();
+
+        Mockito.verify(firebaseAuthMock).getCurrentUser();
+
+        Assert.assertEquals(expectedState, gottenState);
     }
 }
