@@ -39,7 +39,6 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
     private final SavedStateHandle _store;
     @NotNull
     private final ErrorBus _errorBus;
-
     @NotNull
     private final DatabaseReference _database;
 
@@ -48,14 +47,14 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
 
     public IdeaListViewModelImpl(
         @NotNull SavedStateHandle store,
-        @NotNull ErrorBus errorBus
+        @NotNull ErrorBus errorBus,
+        @NotNull DatabaseReference database
     ) {
         _stateController = BehaviorSubject
             .createDefault(new IdeaListState(null, false));
         _store = store;
         _errorBus = errorBus;
-
-        _database = FirebaseDatabase.getInstance(IdeaContext.DATABASE_URL).getReference();
+        _database = database;
 
         restoreState();
     }
@@ -96,25 +95,9 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
         _recentIdeasListener = _database.child(IdeaContext.IDEAS_PATH).limitToLast(IDEA_COUNT_LIMIT)
             .addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Log.d(TAG, "getRecentIdeas(): onDataChange(): entering..");
-
-                    final ArrayList<IdeaPresentation> ideas = new ArrayList<>();
-
-                    for (final DataSnapshot idea : snapshot.getChildren()) {
-                        ideas.add(idea.getValue(IdeaPresentation.class));
-                    }
-
-                    _stateController.onNext(new IdeaListState(Lists.reverse(ideas), false));
-                }
-
+                public void onDataChange(@NonNull DataSnapshot snapshot) { onIdeasGotten(snapshot); }
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    if (error.getCode() == DatabaseError.WRITE_CANCELED) return;
-
-                    _stateController.onNext(new IdeaListState(null, false));
-                    _errorBus.emitError(new ErrorReference(ErrorEnum.DATABASE_FAIL.id, error.getMessage()));
-                }
+                public void onCancelled(@NonNull DatabaseError error) { onDatabaseErrorGotten(error); }
             });
     }
 
@@ -122,5 +105,22 @@ public class IdeaListViewModelImpl extends IdeaListViewModel {
     public void pause() {
         if (_recentIdeasListener != null)
             _database.child(IdeaContext.IDEAS_PATH).removeEventListener(_recentIdeasListener);
+    }
+
+    private void onIdeasGotten(@NotNull DataSnapshot snapshot) {
+        final ArrayList<IdeaPresentation> ideas = new ArrayList<>();
+
+        for (final DataSnapshot idea : snapshot.getChildren()) {
+            ideas.add(idea.getValue(IdeaPresentation.class));
+        }
+
+        _stateController.onNext(new IdeaListState(Lists.reverse(ideas), false));
+    }
+
+    private void onDatabaseErrorGotten(@NotNull DatabaseError error) {
+        if (error.getCode() == DatabaseError.WRITE_CANCELED) return;
+
+        _stateController.onNext(new IdeaListState(null, false));
+        _errorBus.emitError(new ErrorReference(ErrorEnum.DATABASE_FAIL.id, error.getMessage()));
     }
 }

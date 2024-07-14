@@ -10,7 +10,9 @@ import com.qubacy.shareit.application.ui.activity._common.model.base.state.Share
 import com.qubacy.shareit.application.ui.activity._common.page.idea._common.presentation.IdeaPresentation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class IdeaListState extends ShareItState implements Parcelable {
     @Nullable
@@ -59,5 +61,25 @@ public class IdeaListState extends ShareItState implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         if (ideas != null) dest.writeArray(ideas.toArray());
         dest.writeByte((byte) (isLoading ? 1 : 0));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        IdeaListState that = (IdeaListState) o;
+        boolean areItemsEqual;
+
+        if (that.ideas == null && ideas == null) areItemsEqual = true;
+        else if (that.ideas == null || ideas == null) areItemsEqual = false;
+        else areItemsEqual = Arrays.equals(ideas.toArray(), that.ideas.toArray());
+
+        return isLoading == that.isLoading && areItemsEqual;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ideas, isLoading);
     }
 }

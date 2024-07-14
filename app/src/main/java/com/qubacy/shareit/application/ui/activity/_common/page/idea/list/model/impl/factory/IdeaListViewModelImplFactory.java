@@ -5,6 +5,7 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.database.DatabaseReference;
 import com.qubacy.shareit.application._common.error.bus._common.ErrorBus;
 import com.qubacy.shareit.application.ui.activity._common.page.idea.list.model.impl.IdeaListViewModelImpl;
 
@@ -14,12 +15,15 @@ import javax.inject.Inject;
 
 public class IdeaListViewModelImplFactory extends AbstractSavedStateViewModelFactory {
     private final ErrorBus _errorBus;
+    private final DatabaseReference _database;
 
     @Inject
     public IdeaListViewModelImplFactory(
-        @NotNull ErrorBus errorBus
+        @NotNull ErrorBus errorBus,
+        @NotNull DatabaseReference database
     ) {
         _errorBus = errorBus;
+        _database = database;
     }
 
     @NonNull
@@ -32,6 +36,6 @@ public class IdeaListViewModelImplFactory extends AbstractSavedStateViewModelFac
         if (!aClass.isAssignableFrom(IdeaListViewModelImpl.class))
             throw new IllegalArgumentException();
 
-        return (T) new IdeaListViewModelImpl(savedStateHandle, _errorBus);
+        return (T) new IdeaListViewModelImpl(savedStateHandle, _errorBus, _database);
     }
 }
