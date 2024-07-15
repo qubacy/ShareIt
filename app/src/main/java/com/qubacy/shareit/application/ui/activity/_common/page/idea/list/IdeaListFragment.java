@@ -11,6 +11,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -144,8 +145,11 @@ public class IdeaListFragment
     }
 
     private void setupNavDrawer() {
+        final AppCompatActivity activity = (AppCompatActivity) requireActivity();
+
+        if (!(activity instanceof ShareItActivity shareItActivity)) return;
+
         final Fragment fragmentRef = this;
-        final ShareItActivity shareItActivity = (ShareItActivity) requireActivity();
         final NavigationView navigationView = shareItActivity.getNavigationDrawer();
         final DrawerLayout drawerLayout = shareItActivity.getNavigationDrawerLayout();
 
@@ -232,8 +236,12 @@ public class IdeaListFragment
     }
 
     private void setupTopAppBar() {
+        final AppCompatActivity activity = (AppCompatActivity) requireActivity();
+
+        if (!(activity instanceof ShareItActivity shareItActivity)) return;
+
         TopBarFragmentUtil.setupTopAppBar(
-            (ShareItActivity) requireActivity(),
+            shareItActivity,
             this,
             _binding.fragmentIdeasTopbarToolbar
         );

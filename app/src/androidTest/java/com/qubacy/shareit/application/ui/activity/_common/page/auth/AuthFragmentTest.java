@@ -262,6 +262,6 @@ public class AuthFragmentTest {
                 FragmentTestUtils.attachNavController(fragment, _testNavController);
 
                 return null;
-            });
+            }, null);
     }
 }
