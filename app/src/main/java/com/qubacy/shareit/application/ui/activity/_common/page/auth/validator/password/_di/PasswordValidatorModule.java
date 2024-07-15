@@ -10,8 +10,8 @@ import dagger.hilt.android.components.FragmentComponent;
 
 @InstallIn(FragmentComponent.class)
 @Module
-public abstract class PasswordValidatorModule {
+public interface PasswordValidatorModule {
     @Binds
     @PasswordValidatorQualifier
-    abstract Validator bindPasswordValidator(PasswordValidatorImpl passwordValidator);
+    Validator bindPasswordValidator(PasswordValidatorImpl passwordValidator);
 }

@@ -10,7 +10,7 @@ import dagger.hilt.android.components.FragmentComponent;
 
 @InstallIn(FragmentComponent.class)
 @Module
-interface EmailValidatorModule {
+public interface EmailValidatorModule {
     @Binds
     @EmailValidatorQualifier
     Validator bindEmailValidator(EmailValidatorImpl emailValidator);

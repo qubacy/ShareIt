@@ -2,10 +2,10 @@ package com.qubacy.shareit.application.ui.activity._common.page.auth.model._di;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import com.qubacy.shareit.application.ui.activity._common.page.auth.model._common.AuthViewModel;
 import com.qubacy.shareit.application.ui.activity._common.page.auth.model._common.state.AuthState;
 import com.qubacy.shareit.application.ui.activity._common.page.auth.model._di.module.AuthViewModelFactoryModule;
 import com.qubacy.shareit.application.ui.activity._common.page.auth.model._di.module.AuthViewModelFactoryQualifier;
-import com.qubacy.shareit.application.ui.activity._common.page.auth.model.impl.AuthViewModelImpl;
 import com.qubacy.shareit.application.ui.activity._common.page.auth.model.impl.factory.AuthViewModelImplFactory;
 
 import org.mockito.Mockito;
@@ -23,13 +23,13 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 )
 public abstract class TestAuthViewModelModule {
     public static BehaviorSubject<AuthState> stateController;
-    public static AuthViewModelImpl instance;
+    public static AuthViewModel instance;
 
     @AuthViewModelFactoryQualifier
     @Provides
     public static ViewModelProvider.Factory provideAuthViewModelFactory() {
         stateController = BehaviorSubject.create();
-        instance = Mockito.mock(AuthViewModelImpl.class);
+        instance = Mockito.mock(AuthViewModel.class);
 
         Mockito.when(instance.getState()).thenReturn(stateController);
 
