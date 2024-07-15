@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -84,8 +85,12 @@ public class IdeaCreateFragment extends StatefulFragment<IdeaCreateState, IdeaCr
     }
 
     private void setupTopAppBar() {
+        final AppCompatActivity activity = (AppCompatActivity) requireActivity();
+
+        if (!(activity instanceof ShareItActivity shareItActivity)) return;
+
         TopBarFragmentUtil.setupTopAppBar(
-            (ShareItActivity) requireActivity(),
+            shareItActivity,
             this,
             _binding.fragmentIdeaCreateTopbarToolbar
         );
@@ -124,6 +129,8 @@ public class IdeaCreateFragment extends StatefulFragment<IdeaCreateState, IdeaCr
     private void adjustUiWithLoadingState(boolean isLoading) {
         _binding.fragmentIdeaCreateTopbarProgressIndicator
             .setVisibility(isLoading ? View.VISIBLE : View.INVISIBLE);
+        _binding.fragmentIdeaCreateTitleInput.setEnabled(!isLoading);
+        _binding.fragmentIdeaCreateContentInput.setEnabled(!isLoading);
         _binding.fragmentIdeaCreateSaveButton.setEnabled(!isLoading);
         _binding.fragmentIdeaCreateCancelButton.setEnabled(!isLoading);
     }

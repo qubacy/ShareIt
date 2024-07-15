@@ -50,7 +50,6 @@ public class IdeaListFragmentTest {
     public final HiltAndroidRule hiltRule = new HiltAndroidRule(this);
 
     private TestNavHostController _testNavController;
-    private ViewModelStore _navViewModelStore;
     private SavedStateHandle _navSavedStateHandle;
 
     @Before
@@ -63,10 +62,10 @@ public class IdeaListFragmentTest {
     private void setupNavController() {
         _testNavController = new TestNavHostController(
             InstrumentationRegistry.getInstrumentation().getTargetContext());
-        _navViewModelStore = new ViewModelStore();
+        final ViewModelStore navViewModelStore = new ViewModelStore();
 
         InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
-            _testNavController.setViewModelStore(_navViewModelStore);
+            _testNavController.setViewModelStore(navViewModelStore);
             _testNavController.setGraph(R.navigation.nav_graph);
             _testNavController.setCurrentDestination(R.id.ideaListFragment);
 

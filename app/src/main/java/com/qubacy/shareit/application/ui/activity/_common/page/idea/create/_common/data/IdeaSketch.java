@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class IdeaSketch {
     public static final String TITLE_PROP_NAME = "title";
@@ -27,5 +28,18 @@ public class IdeaSketch {
         map.put(CONTENT_PROP_NAME, content);
 
         return map;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IdeaSketch that)) return false;
+
+        return Objects.equals(title, that.title) && Objects.equals(content, that.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, content);
     }
 }
