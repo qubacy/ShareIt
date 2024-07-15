@@ -11,7 +11,7 @@ import dagger.hilt.android.components.ActivityComponent;
 
 @InstallIn(ActivityComponent.class)
 @Module
-public interface ShareItActivityViewModelModule {
+public interface ShareItActivityViewModelFactoryModule {
     @ShareItActivityViewModelFactoryQualifier
     @Binds
     ViewModelProvider.Factory bindShareItActivityViewModelFactory(
