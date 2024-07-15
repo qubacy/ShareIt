@@ -1,6 +1,5 @@
 package com.qubacy.shareit.application.ui.activity._common.page.idea.details;
 
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.transition.MaterialContainerTransform;
 import com.qubacy.shareit.R;
@@ -68,8 +68,12 @@ public class IdeaDetailsFragment extends ShareItFragment {
     }
 
     private void setupTopAppBar() {
+        final AppCompatActivity activity = (AppCompatActivity) requireActivity();
+
+        if (!(activity instanceof ShareItActivity shareItActivity)) return;
+
         TopBarFragmentUtil.setupTopAppBar(
-            (ShareItActivity) requireActivity(),
+            shareItActivity,
             this,
             _binding.fragmentIdeaDetailsTopbarToolbar
         );
